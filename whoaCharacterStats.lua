@@ -1,8 +1,10 @@
 local config = whoaCharacterStats.config
 local _, class = UnitClass("player")
+local stat, crit, haste, mastery, versatility = 0
 
-local COLOR_RED  = "ff0000"
-local COLOR_GOLD = "ffd700"
+local COLOR_WHITE = "ffffff"
+local COLOR_RED   = "ff0000"
+local COLOR_GOLD  = "ffd700"
 local INT = "Int"
 local STR = "Strength"
 local AGI = "Agi"
@@ -103,21 +105,37 @@ local CLASSES = {
 
 -- # Versatilty
 local function getVersatility()
-    local versatilty = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
-    return "|cffffffff"..round(versatilty, config.dp).."|r%"
+    return GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
+end
+local function getVersatilityText()
+    local color = COLOR_WHITE
+    local v = getVersatility()
+    if versatility < v then color = COLOR_GOLD end
+    return "|cff"..color..round(v, config.dp).."%|r"
 end
 
 -- # Mastery
 local function getMastery()
-    local mastery = GetMasteryEffect()
-    return "|cffffffff"..round(mastery, config.dp).."|r%"
+    return GetMasteryEffect()
+end
+local function getMasteryText()
+    local color = COLOR_WHITE
+    local m = getMastery()
+    if mastery < m then color = COLOR_GOLD end
+    return "|cff"..color..round(m, config.dp).."%|r"
 end
 
 -- # Crit
 local function getCrit()
+    return GetCritChance()
+end
+local function getCritText()
     -- local specId = GetSpecialization()
     -- return "|cffffffff"..round(CLASSES[class][specId]["crit"], config.dp).."|r%"
-    return "|cffffffff"..round(GetCritChance(), config.dp).."|r%"
+    local color = COLOR_WHITE
+    local c = getCrit()
+    if crit < c then color = COLOR_GOLD end
+    return "|cff"..color..round(c, config.dp).."%|r"
 end
 
 -- # Haste
@@ -126,10 +144,16 @@ local function getHaste()
     if CLASSES[class][specId]["haste"] == CR_HASTE_SPELL
     or CLASSES[class][specId]["haste"] == CR_HASTE_RANGED
     then
-        return "|cffffffff"..round(GetRangedHaste(), config.dp).."|r%"
+        return GetRangedHaste()
     else
-        return "|cffffffff"..round(GetMeleeHaste(), config.dp).."|r%"
+        return GetMeleeHaste()
     end
+end
+local function getHasteText()
+    local color = COLOR_WHITE
+    local h = getHaste()
+    if haste < h then color = COLOR_GOLD end
+    return "|cff"..color..round(h, config.dp).."%|r"
 end
 
 -- # Power
@@ -137,10 +161,16 @@ local function getPower()
     local specId = GetSpecialization()
     local v = CLASSES[class][specId]["power"]
     if v == 1 then
-        return formatNr(getAttackPower())
+        return getAttackPower()
     else
-        return formatNr(GetSpellBonusDamage(v))
+        return GetSpellBonusDamage(v)
     end
+end
+local function getPowerText()
+    local color = COLOR_WHITE
+    local p = getPower()
+    if stat < p then color = COLOR_GOLD end
+    return "|cff"..color..formatNr(p).."|r"
 end
 local function getMainStat()
     local specId = GetSpecialization()
@@ -188,11 +218,11 @@ local function getY(v)
     end
 end
 local statValue, hasteValue, critValue, masteryValue, versatilityValue, statText, hasteText, critText, masteryText, versatilityText
-createFrame("whoaCharacterStats_col1Mainstat",    p, a, x, 4.4*lh+y,            col1, txt1); createFrame("whoaCharacterStats_col2Mainstat",    whoaCharacterStats_col1Mainstat,    "LEFT", col1+3, 0, col2, txt2)
-createFrame("whoaCharacterStats_col1Haste",       p, a, x, getY("Haste"),       col1, txt1); createFrame("whoaCharacterStats_col2Haste",       whoaCharacterStats_col1Haste,       "LEFT", col1+3, 0, col2, txt2)
-createFrame("whoaCharacterStats_col1Mastery",     p, a, x, getY("Mastery"),     col1, txt1); createFrame("whoaCharacterStats_col2Mastery",     whoaCharacterStats_col1Mastery,     "LEFT", col1+3, 0, col2, txt2)
-createFrame("whoaCharacterStats_col1Crit",        p, a, x, getY("Crit"),        col1, txt1); createFrame("whoaCharacterStats_col2Crit",        whoaCharacterStats_col1Crit,        "LEFT", col1+3, 0, col2, txt2)
-createFrame("whoaCharacterStats_col1Versatility", p, a, x, getY("Versatility"), col1, txt1); createFrame("whoaCharacterStats_col2Versatility", whoaCharacterStats_col1Versatility, "LEFT", col1+3, 0, col2, txt2)
+createFrame("whoaCharacterStats_col1Mainstat",    p, a, x, 4.4*lh+y,            col1, txt1); createFrame("whoaCharacterStats_col2Mainstat",    whoaCharacterStats_col1Mainstat,    "LEFT", col1+config.padding, 0, col2, txt2)
+createFrame("whoaCharacterStats_col1Haste",       p, a, x, getY("Haste"),       col1, txt1); createFrame("whoaCharacterStats_col2Haste",       whoaCharacterStats_col1Haste,       "LEFT", col1+config.padding, 0, col2, txt2)
+createFrame("whoaCharacterStats_col1Mastery",     p, a, x, getY("Mastery"),     col1, txt1); createFrame("whoaCharacterStats_col2Mastery",     whoaCharacterStats_col1Mastery,     "LEFT", col1+config.padding, 0, col2, txt2)
+createFrame("whoaCharacterStats_col1Crit",        p, a, x, getY("Crit"),        col1, txt1); createFrame("whoaCharacterStats_col2Crit",        whoaCharacterStats_col1Crit,        "LEFT", col1+config.padding, 0, col2, txt2)
+createFrame("whoaCharacterStats_col1Versatility", p, a, x, getY("Versatility"), col1, txt1); createFrame("whoaCharacterStats_col2Versatility", whoaCharacterStats_col1Versatility, "LEFT", col1+config.padding, 0, col2, txt2)
 if config.stats == "left" then
     statValue = whoaCharacterStats_col1Mainstat
     hasteValue = whoaCharacterStats_col1Haste
@@ -221,13 +251,21 @@ masteryText.text:SetText("Mastery")
 critText.text:SetText("Crit")
 versatilityText.text:SetText("Versatility")
 
+local function init()
+    stat = getPower()
+    haste = getHaste()
+    mastery = getMastery()
+    crit = getCrit()
+    versatility = getVersatility()
+end
+
 local function update()
     statText.text:SetText(getMainStat())
-    statValue.text:SetText(getPower())
-    hasteValue.text:SetText(getHaste())
-    masteryValue.text:SetText(getMastery())
-    critValue.text:SetText(getCrit())
-    versatilityValue.text:SetText(getVersatility())
+    statValue.text:SetText(getPowerText())
+    hasteValue.text:SetText(getHasteText())
+    masteryValue.text:SetText(getMasteryText())
+    critValue.text:SetText(getCritText())
+    versatilityValue.text:SetText(getVersatilityText())
 end
 
 ---------------------------------------------------
@@ -240,6 +278,9 @@ function w:OnEvent(event)
     if event == "PLAYER_LOGIN" then
         SlashCmdList['RELOAD'] = function() ReloadUI() end
         SLASH_RELOAD1 = '/rl'
+        SlashCmdList['INIT'] = function() init() end
+        SLASH_INIT1 = '/i'
+        init()
         update()
     elseif event == "UNIT_AURA" then
         update()
