@@ -1,0 +1,8 @@
+## Interface: 90002
+## Title: whoa |cFFFFFFFFCharacterStats|r
+## Notes: A simple textpanel with your stats.
+## Author: whoa
+## Version: 9.0.2
+
+config.lua
+whoaCharacterStats.lua
