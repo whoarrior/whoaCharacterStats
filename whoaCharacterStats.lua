@@ -274,14 +274,16 @@ end
 local w = CreateFrame("Frame", nil, UIParent)
 w:RegisterEvent("PLAYER_LOGIN")
 w:RegisterEvent("UNIT_AURA")
+w:RegisterEvent("ADDON_LOADED")
 function w:OnEvent(event)
     if event == "PLAYER_LOGIN" then
         SlashCmdList['RELOAD'] = function() ReloadUI() end
         SLASH_RELOAD1 = '/rl'
         SlashCmdList['INIT'] = function() init() end
         SLASH_INIT1 = '/i'
-        init()
         update()
+    elseif event == "ADDON_LOADED" then
+        init()
     elseif event == "UNIT_AURA" then
         update()
     end
