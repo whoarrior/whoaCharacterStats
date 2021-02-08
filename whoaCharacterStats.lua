@@ -155,6 +155,7 @@ local function createFrame(spec, parent, point, xOffset, yOffset, width, alignme
     f:SetPoint(point, parent, point, xOffset, yOffset)
     f:SetWidth(width)
     f:SetHeight(20)
+    f:SetScale(config.scale)
     f.text = f:CreateFontString(spec.."text", "OVERLAY")
     f.text:SetAllPoints(f)
     f.text:SetFontObject(TextStatusBarText)
@@ -164,6 +165,8 @@ end
 -- # config
 local col1 = config.col1
 local col2 = config.col2
+local txt1 = config.txt1
+local txt2 = config.txt2
 local lh = config.lh
 local p = config.position.p
 local a = config.position.a
@@ -184,29 +187,52 @@ local function getY(v)
         return y
     end
 end
-createFrame("whoaCharacterStats_valMainstat",    p, a, x, 4.4*lh+y,            col1, "RIGHT"); createFrame("whoaCharacterStats_txtMainstat",    whoaCharacterStats_valMainstat,    "LEFT", col1+3, 0, col2, "LEFT")
-createFrame("whoaCharacterStats_valHaste",       p, a, x, getY("Haste"),       col1, "RIGHT"); createFrame("whoaCharacterStats_txtHaste",       whoaCharacterStats_valHaste,       "LEFT", col1+3, 0, col2, "LEFT")
-createFrame("whoaCharacterStats_valMastery",     p, a, x, getY("Mastery"),     col1, "RIGHT"); createFrame("whoaCharacterStats_txtMastery",     whoaCharacterStats_valMastery,     "LEFT", col1+3, 0, col2, "LEFT")
-createFrame("whoaCharacterStats_valCrit",        p, a, x, getY("Crit"),        col1, "RIGHT"); createFrame("whoaCharacterStats_txtCrit",        whoaCharacterStats_valCrit,        "LEFT", col1+3, 0, col2, "LEFT")
-createFrame("whoaCharacterStats_valVersatility", p, a, x, getY("Versatility"), col1, "RIGHT"); createFrame("whoaCharacterStats_txtVersatility", whoaCharacterStats_valVersatility, "LEFT", col1+3, 0, col2, "LEFT")
-whoaCharacterStats_txtHaste.text:SetText("Haste")
-whoaCharacterStats_txtMastery.text:SetText("Mastery")
-whoaCharacterStats_txtCrit.text:SetText("Crit")
-whoaCharacterStats_txtVersatility.text:SetText("Versatility")
+local statValue, hasteValue, critValue, masteryValue, versatilityValue, statText, hasteText, critText, masteryText, versatilityText
+createFrame("whoaCharacterStats_col1Mainstat",    p, a, x, 4.4*lh+y,            col1, txt1); createFrame("whoaCharacterStats_col2Mainstat",    whoaCharacterStats_col1Mainstat,    "LEFT", col1+3, 0, col2, txt2)
+createFrame("whoaCharacterStats_col1Haste",       p, a, x, getY("Haste"),       col1, txt1); createFrame("whoaCharacterStats_col2Haste",       whoaCharacterStats_col1Haste,       "LEFT", col1+3, 0, col2, txt2)
+createFrame("whoaCharacterStats_col1Mastery",     p, a, x, getY("Mastery"),     col1, txt1); createFrame("whoaCharacterStats_col2Mastery",     whoaCharacterStats_col1Mastery,     "LEFT", col1+3, 0, col2, txt2)
+createFrame("whoaCharacterStats_col1Crit",        p, a, x, getY("Crit"),        col1, txt1); createFrame("whoaCharacterStats_col2Crit",        whoaCharacterStats_col1Crit,        "LEFT", col1+3, 0, col2, txt2)
+createFrame("whoaCharacterStats_col1Versatility", p, a, x, getY("Versatility"), col1, txt1); createFrame("whoaCharacterStats_col2Versatility", whoaCharacterStats_col1Versatility, "LEFT", col1+3, 0, col2, txt2)
+if config.stats == "left" then
+    statValue = whoaCharacterStats_col1Mainstat
+    hasteValue = whoaCharacterStats_col1Haste
+    masteryValue = whoaCharacterStats_col1Mastery
+    critValue = whoaCharacterStats_col1Crit
+    versatilityValue = whoaCharacterStats_col1Versatility
+    statText = whoaCharacterStats_col2Mainstat
+    hasteText = whoaCharacterStats_col2Haste
+    masteryText = whoaCharacterStats_col2Mastery
+    critText = whoaCharacterStats_col2Crit
+    versatilityText = whoaCharacterStats_col2Versatility
+else
+    statValue = whoaCharacterStats_col2Mainstat
+    hasteValue = whoaCharacterStats_col2Haste
+    masteryValue = whoaCharacterStats_col2Mastery
+    critValue = whoaCharacterStats_col2Crit
+    versatilityValue = whoaCharacterStats_col2Versatility
+    statText = whoaCharacterStats_col1Mainstat
+    hasteText = whoaCharacterStats_col1Haste
+    masteryText = whoaCharacterStats_col1Mastery
+    critText = whoaCharacterStats_col1Crit
+    versatilityText = whoaCharacterStats_col1Versatility
+end
+hasteText.text:SetText("Haste")
+masteryText.text:SetText("Mastery")
+critText.text:SetText("Crit")
+versatilityText.text:SetText("Versatility")
 
 local function update()
-    whoaCharacterStats_txtMainstat.text:SetText(getMainStat())
-    whoaCharacterStats_valMainstat.text:SetText(getPower())
-    whoaCharacterStats_valHaste.text:SetText(getHaste())
-    whoaCharacterStats_valMastery.text:SetText(getMastery())
-    whoaCharacterStats_valCrit.text:SetText(getCrit())
-    whoaCharacterStats_valVersatility.text:SetText(getVersatility())
+    statText.text:SetText(getMainStat())
+    statValue.text:SetText(getPower())
+    hasteValue.text:SetText(getHaste())
+    masteryValue.text:SetText(getMastery())
+    critValue.text:SetText(getCrit())
+    versatilityValue.text:SetText(getVersatility())
 end
 
 ---------------------------------------------------
 -- EVENTS
 ---------------------------------------------------
-
 local w = CreateFrame("Frame", nil, UIParent)
 w:RegisterEvent("PLAYER_LOGIN")
 w:RegisterEvent("UNIT_AURA")
