@@ -104,20 +104,20 @@ local CLASSES = {
 -- # Versatilty
 local function getVersatility()
     local versatilty = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
-    return "|cffffffff"..round(versatilty, 2).."|r%"
+    return "|cffffffff"..round(versatilty, config.dp).."|r%"
 end
 
 -- # Mastery
 local function getMastery()
     local mastery = GetMasteryEffect()
-    return "|cffffffff"..round(mastery, 2).."|r%"
+    return "|cffffffff"..round(mastery, config.dp).."|r%"
 end
 
 -- # Crit
 local function getCrit()
     -- local specId = GetSpecialization()
-    -- return "|cffffffff"..round(CLASSES[class][specId]["crit"], 2).."|r%"
-    return "|cffffffff"..round(GetCritChance(), 2).."|r%"
+    -- return "|cffffffff"..round(CLASSES[class][specId]["crit"], config.dp).."|r%"
+    return "|cffffffff"..round(GetCritChance(), config.dp).."|r%"
 end
 
 -- # Haste
@@ -126,9 +126,9 @@ local function getHaste()
     if CLASSES[class][specId]["haste"] == CR_HASTE_SPELL
     or CLASSES[class][specId]["haste"] == CR_HASTE_RANGED
     then
-        return "|cffffffff"..round(GetRangedHaste(), 2).."|r%"
+        return "|cffffffff"..round(GetRangedHaste(), config.dp).."|r%"
     else
-        return "|cffffffff"..round(GetMeleeHaste(), 2).."|r%"
+        return "|cffffffff"..round(GetMeleeHaste(), config.dp).."|r%"
     end
 end
 
