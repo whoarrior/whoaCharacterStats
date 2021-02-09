@@ -1,0 +1,3 @@
+<Bindings>
+    <Binding name="WHOA_CHARACTERSTATS_INIT" header="WHOA_CHARACTERSTATS" Category="whoa |cffffffffAddOns|r">whoa_initStats()</Binding>
+</Bindings>

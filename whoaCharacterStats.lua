@@ -1,13 +1,33 @@
+local COLOR_WHITE  = "ffffff"
+local COLOR_GREEN  = "00ff00"
+local COLOR_BLUE   = "69ccf0"
+local COLOR_RED    = "ff0000"
+local COLOR_GOLD   = "ffd700"
+local COLOR_GREY   = "acacac"
+local COLOR_ORANGE = "ff7d0a"
+local COLOR_YELLOW = COLOR_GOLD
+
+ADDON_NAME = "|cff"..COLOR_GREY.."whoa|r CharacterStats"
+
+BINDING_HEADER_WHOA_CHARACTERSTATS = ADDON_NAME
+BINDING_NAME_WHOA_CHARACTERSTATS_INIT = "Initialize your stats before a fight"
+
 local config = whoaCharacterStats.config
 local _, class = UnitClass("player")
 local stat, crit, haste, mastery, versatility = 0
+local statValue, hasteValue, critValue, masteryValue, versatilityValue, statText, hasteText, critText, masteryText, versatilityText
 
 local COLOR_WHITE = "ffffff"
+local COLOR_GREEN = "00ff00"
 local COLOR_RED   = "ff0000"
 local COLOR_GOLD  = "ffd700"
-local INT = "Int"
-local STR = "Strength"
-local AGI = "Agi"
+local INT         = "Int"
+local STR         = "Strength"
+local AGI         = "Agi"
+local HASTE       = "Haste"
+local MASTERY     = "Mastery"
+local CRIT        = "Crit"
+local VERSATILITY = "Versatility"
 
 ---------------------------------------------------
 -- LOCAL LIBRARY
@@ -18,7 +38,7 @@ local sp = 0
 local function getAttackPower()
     base, posBuff, negBuff = UnitAttackPower("player")
     ap = base + posBuff + negBuff
-    return "|cffffffff"..ap.."|r"
+    return ap
 end
 
 local function round(n, dp)
@@ -110,7 +130,9 @@ end
 local function getVersatilityText()
     local color = COLOR_WHITE
     local v = getVersatility()
-    if versatility < v then color = COLOR_GOLD end
+    if versatility < v then color = COLOR_GREEN end
+    if versatility > v then color = COLOR_RED end
+    versatilityText.text:SetText("|cff"..color..VERSATILITY.."|r")
     return "|cff"..color..round(v, config.dp).."%|r"
 end
 
@@ -121,7 +143,9 @@ end
 local function getMasteryText()
     local color = COLOR_WHITE
     local m = getMastery()
-    if mastery < m then color = COLOR_GOLD end
+    if mastery < m then color = COLOR_GREEN end
+    if mastery > m then color = COLOR_RED end
+    masteryText.text:SetText("|cff"..color..MASTERY.."|r")
     return "|cff"..color..round(m, config.dp).."%|r"
 end
 
@@ -134,7 +158,9 @@ local function getCritText()
     -- return "|cffffffff"..round(CLASSES[class][specId]["crit"], config.dp).."|r%"
     local color = COLOR_WHITE
     local c = getCrit()
-    if crit < c then color = COLOR_GOLD end
+    if crit < c then color = COLOR_GREEN end
+    if crit > c then color = COLOR_RED end
+    critText.text:SetText("|cff"..color..CRIT.."|r")
     return "|cff"..color..round(c, config.dp).."%|r"
 end
 
@@ -152,11 +178,17 @@ end
 local function getHasteText()
     local color = COLOR_WHITE
     local h = getHaste()
-    if haste < h then color = COLOR_GOLD end
+    if haste < h then color = COLOR_GREEN end
+    if haste > h then color = COLOR_RED end
+    hasteText.text:SetText("|cff"..color..HASTE.."|r")
     return "|cff"..color..round(h, config.dp).."%|r"
 end
 
--- # Power
+-- # MainStat
+local function getMainStat()
+    local specId = GetSpecialization()
+    return CLASSES[class][specId]["stat"]
+end
 local function getPower()
     local specId = GetSpecialization()
     local v = CLASSES[class][specId]["power"]
@@ -169,12 +201,10 @@ end
 local function getPowerText()
     local color = COLOR_WHITE
     local p = getPower()
-    if stat < p then color = COLOR_GOLD end
+    if stat < p then color = COLOR_GREEN end
+    if stat > p then color = COLOR_RED end
+    statText.text:SetText("|cff"..color..getMainStat().."|r")
     return "|cff"..color..formatNr(p).."|r"
-end
-local function getMainStat()
-    local specId = GetSpecialization()
-    return CLASSES[class][specId]["stat"]
 end
 
 ---------------------------------------------------
@@ -217,12 +247,11 @@ local function getY(v)
         return y
     end
 end
-local statValue, hasteValue, critValue, masteryValue, versatilityValue, statText, hasteText, critText, masteryText, versatilityText
-createFrame("whoaCharacterStats_col1Mainstat",    p, a, x, 4.4*lh+y,            col1, txt1); createFrame("whoaCharacterStats_col2Mainstat",    whoaCharacterStats_col1Mainstat,    "LEFT", col1+config.padding, 0, col2, txt2)
-createFrame("whoaCharacterStats_col1Haste",       p, a, x, getY("Haste"),       col1, txt1); createFrame("whoaCharacterStats_col2Haste",       whoaCharacterStats_col1Haste,       "LEFT", col1+config.padding, 0, col2, txt2)
-createFrame("whoaCharacterStats_col1Mastery",     p, a, x, getY("Mastery"),     col1, txt1); createFrame("whoaCharacterStats_col2Mastery",     whoaCharacterStats_col1Mastery,     "LEFT", col1+config.padding, 0, col2, txt2)
-createFrame("whoaCharacterStats_col1Crit",        p, a, x, getY("Crit"),        col1, txt1); createFrame("whoaCharacterStats_col2Crit",        whoaCharacterStats_col1Crit,        "LEFT", col1+config.padding, 0, col2, txt2)
-createFrame("whoaCharacterStats_col1Versatility", p, a, x, getY("Versatility"), col1, txt1); createFrame("whoaCharacterStats_col2Versatility", whoaCharacterStats_col1Versatility, "LEFT", col1+config.padding, 0, col2, txt2)
+createFrame("whoaCharacterStats_col1Mainstat",    p, a, x, 4.4*lh+y,            col1, txt1); createFrame("whoaCharacterStats_col2Mainstat",    p, a, col1+col2+config.padding, 4.4*lh+y,            col2, txt2)
+createFrame("whoaCharacterStats_col1Haste",       p, a, x, getY("Haste"),       col1, txt1); createFrame("whoaCharacterStats_col2Haste",       p, a, col1+col2+config.padding, getY("Haste"),       col2, txt2)
+createFrame("whoaCharacterStats_col1Mastery",     p, a, x, getY("Mastery"),     col1, txt1); createFrame("whoaCharacterStats_col2Mastery",     p, a, col1+col2+config.padding, getY("Mastery"),     col2, txt2)
+createFrame("whoaCharacterStats_col1Crit",        p, a, x, getY("Crit"),        col1, txt1); createFrame("whoaCharacterStats_col2Crit",        p, a, col1+col2+config.padding, getY("Crit"),        col2, txt2)
+createFrame("whoaCharacterStats_col1Versatility", p, a, x, getY("Versatility"), col1, txt1); createFrame("whoaCharacterStats_col2Versatility", p, a, col1+col2+config.padding, getY("Versatility"), col2, txt2)
 if config.stats == "left" then
     statValue = whoaCharacterStats_col1Mainstat
     hasteValue = whoaCharacterStats_col1Haste
@@ -246,18 +275,6 @@ else
     critText = whoaCharacterStats_col1Crit
     versatilityText = whoaCharacterStats_col1Versatility
 end
-hasteText.text:SetText("Haste")
-masteryText.text:SetText("Mastery")
-critText.text:SetText("Crit")
-versatilityText.text:SetText("Versatility")
-
-local function init()
-    stat = getPower()
-    haste = getHaste()
-    mastery = getMastery()
-    crit = getCrit()
-    versatility = getVersatility()
-end
 
 local function update()
     statText.text:SetText(getMainStat())
@@ -266,6 +283,15 @@ local function update()
     masteryValue.text:SetText(getMasteryText())
     critValue.text:SetText(getCritText())
     versatilityValue.text:SetText(getVersatilityText())
+end
+
+function whoa_initStats()
+    stat = getPower()
+    haste = getHaste()
+    mastery = getMastery()
+    crit = getCrit()
+    versatility = getVersatility()
+    update()
 end
 
 ---------------------------------------------------
@@ -279,11 +305,11 @@ function w:OnEvent(event)
     if event == "PLAYER_LOGIN" then
         SlashCmdList['RELOAD'] = function() ReloadUI() end
         SLASH_RELOAD1 = '/rl'
-        SlashCmdList['INIT'] = function() init() end
+        SlashCmdList['INIT'] = function() whoa_initStats() end
         SLASH_INIT1 = '/i'
         update()
     elseif event == "ADDON_LOADED" then
-        init()
+        whoa_initStats()
     elseif event == "UNIT_AURA" then
         update()
     end

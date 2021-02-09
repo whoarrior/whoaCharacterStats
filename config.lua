@@ -1,5 +1,6 @@
 whoaCharacterStats = {}
--- # example with value on the left column
+-- # example configuration
+-- #   value on the left column
 -- whoaCharacterStats.config = {
 --     stats = "left", -- # stats on the left or right column
 --     col1 = 40,      -- # column width
@@ -17,14 +18,15 @@ whoaCharacterStats = {}
 --         ["Versatility"] = 4,
 --     },
 --     position = {
---         p = PlayerFrame,
+--         p = PlayerFrame,  -- # UIParent
 --         a = "TOPRIGHT",
 --         x = 40,
 --         y = 26,
 --     },
 -- }
 
--- # example with value on the right column
+-- # example configuration
+-- #   value on the right column
 whoaCharacterStats.config = {
     stats = "right", -- # stats on the left or right column
     col1 = 80,       -- # column width
@@ -34,7 +36,7 @@ whoaCharacterStats.config = {
     lh = 12,         -- # line height
     dp = 0,          -- # decimal places
     scale = 1.2,     -- # scaling
-    padding = -15,   -- # padding between columns
+    padding = -20,   -- # padding between columns
     order = {
         ["Haste"]       = 2,
         ["Mastery"]     = 3,
