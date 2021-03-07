@@ -249,9 +249,9 @@ local function getY(value)
     elseif o == "4th" then
         return 4
     else
-        whoaLog("configuration fail:|r", "ERROR", LOG_LEVEL, ADDON)
-        whoaLog("|r1st "..settings.order["1st"]..", 2nd "..settings.order["2nd"]..", 3rd "..settings.order["3rd"]..", 4th "..settings.order["4th"], "ERROR", LOG_LEVEL, ADDON)
-        whoaLog("|r|cff"..WHOA_LIB_COLOR_RED..value.."|r is not configured!", "ERROR", LOG_LEVEL, ADDON)
+        whoaLog("configuration fail:|r", "WARN", LOG_LEVEL, ADDON)
+        whoaLog("|r1st "..settings.order["1st"]..", 2nd "..settings.order["2nd"]..", 3rd "..settings.order["3rd"]..", 4th "..settings.order["4th"], "WARN", LOG_LEVEL, ADDON)
+        whoaLog("|r|cff"..WHOA_LIB_COLOR_RED..value.."|r is not configured!", "WARN", LOG_LEVEL, ADDON)
         return 4
     end
 end

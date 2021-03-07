@@ -19,29 +19,21 @@ local BTN_WIDTH  = COL_WIDTH + 5
 local BTN_HEIGHT = LINE_HEIGHT + 2
 
 local ANCHOR = "TOPLEFT"
-local COL1_X = 16
-local COL2_X = 221
-local COL3_X = 426
+local COL1_X = 30
+local COL2_X = 220
+local COL3_X = 410
 local LINE_01_Y =       -30 - LINE_HEIGHT - LINE_PADDING * 4
 local LINE_02_Y = LINE_01_Y - LINE_HEIGHT - LINE_PADDING * 4
-local LINE_03_Y = LINE_02_Y - LINE_HEIGHT - LINE_PADDING * 8
-local LINE_04_Y = LINE_03_Y - LINE_HEIGHT - LINE_PADDING
+local LINE_03_Y = LINE_02_Y - LINE_HEIGHT - LINE_PADDING * 4
+local LINE_04_Y = LINE_03_Y - LINE_HEIGHT - LINE_PADDING * 8
 local LINE_05_Y = LINE_04_Y - LINE_HEIGHT - LINE_PADDING
-local LINE_06_Y = LINE_05_Y - LINE_HEIGHT - LINE_PADDING * 8
-local LINE_07_Y = LINE_06_Y - LINE_HEIGHT - LINE_PADDING * 4
+local LINE_06_Y = LINE_05_Y - LINE_HEIGHT - LINE_PADDING
+local LINE_07_Y = LINE_06_Y - LINE_HEIGHT - LINE_PADDING * 8
 local LINE_08_Y = LINE_07_Y - LINE_HEIGHT - LINE_PADDING * 4
 local LINE_09_Y = LINE_08_Y - LINE_HEIGHT - LINE_PADDING * 4
-local LINE_10_Y = LINE_09_Y - LINE_HEIGHT - LINE_PADDING
-local LINE_11_Y = LINE_10_Y - LINE_HEIGHT - LINE_PADDING
-local LINE_12_Y = LINE_11_Y - LINE_HEIGHT - LINE_PADDING
-local LINE_13_Y = LINE_12_Y - LINE_HEIGHT - LINE_PADDING
-local LINE_14_Y = LINE_13_Y - LINE_HEIGHT - LINE_PADDING
-local LINE_15_Y = LINE_14_Y - LINE_HEIGHT - LINE_PADDING
-local LINE_16_Y = LINE_15_Y - LINE_HEIGHT - LINE_PADDING
-local LINE_17_Y = LINE_16_Y - LINE_HEIGHT - LINE_PADDING
-local LINE_18_Y = LINE_17_Y - LINE_HEIGHT - LINE_PADDING
+local LINE_10_Y = LINE_09_Y - LINE_HEIGHT - LINE_PADDING * 4
 local BOTTOM_LINE = -530
-local y, lh = -16, 24
+local x, y = 16, -16
 
 local ANCHORS = {
     "CENTER",
@@ -80,7 +72,7 @@ local function createButton(width, x, y, label, onClick)
     o:SetScript("OnClick", onClick)
 end
 
-local function createCheckButton(addon, n, x, y, label, desc, onClick, cvar)
+local function createCheckButton(addon, n, x, y, label, desc, cvar, onClick)
     local o = CreateFrame("CheckButton", addon..n, whoaCharacterStats.optionPanel, "InterfaceOptionsCheckButtonTemplate")
     o:SetScript("OnClick", function(self)
         local tick = self:GetChecked()
@@ -127,10 +119,10 @@ end
 local function createSlider(name, label, percent, x, y, min, max, update)
     local o = CreateFrame("Slider", name, whoaCharacterStats.optionPanel, "HorizontalSliderTemplate")
     o:SetPoint(ANCHOR, x, y)
-    o:SetSize(130, 16)
+    o:SetSize(170, 16)
     o:SetMinMaxValues(min, max)
     local oLabel = o:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    oLabel:SetPoint("BOTTOMLEFT", o, "TOPLEFT", 6, -2)
+    oLabel:SetPoint("BOTTOMLEFT", o, "TOPLEFT", 26, -2)
     oLabel:SetJustifyH("LEFT")
     oLabel:SetHeight(18)
     oLabel:SetText(label)
@@ -166,20 +158,20 @@ end
 ---------------------------------------------------
 whoaCharacterStats.optionPanel = CreateFrame("Frame", "whoaCharacterStats.optionPanel", UIParent)
 local title = whoaCharacterStats.optionPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-title:SetPoint(ANCHOR, COL1_X, y)
+title:SetPoint(ANCHOR, x, y)
 title:SetText(NAME)
 local repoLink = whoaCharacterStats.optionPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
-repoLink:SetPoint(ANCHOR, COL1_X, y-20)
+repoLink:SetPoint(ANCHOR, x, y-20)
 repoLink:SetText(REPO)
 whoaCharacterStats.optionPanel.name = NAME
 
 ---------------------------------------------------
 -- BUTTONS
 ---------------------------------------------------
-createButton(BTN_WIDTH-52, COL3_X-123, LINE_02_Y,   "Center Position",  function() whoaCharacterStats_centerPosition(); repoLink:Show(); end)
-createButton(BTN_WIDTH-25, COL3_X+25,  LINE_02_Y,   "Default Position", function() whoaCharacterStats_defaultPosition(); end)
-createButton(BTN_WIDTH-25, COL3_X+25,  LINE_05_Y,   "Default Scaling",  function() whoaCharacterStats_defaultScale(); end)
-createButton(BTN_WIDTH-25, COL3_X+25,  BOTTOM_LINE, "Default Settings", function()
+createButton(BTN_WIDTH-25, COL3_X+25, LINE_02_Y,   "Center Position",  function() whoaCharacterStats_centerPosition(); end)
+createButton(BTN_WIDTH-25, COL3_X+25, LINE_03_Y,   "Default Position", function() whoaCharacterStats_defaultPosition(); end)
+createButton(BTN_WIDTH-25, COL3_X+25, LINE_06_Y,   "Default Scaling",  function() whoaCharacterStats_defaultScale(); end)
+createButton(BTN_WIDTH-25, COL3_X+25, BOTTOM_LINE, "Default Settings", function()
     whoaCharacterStats_setDefaults()
     whoaCharacterStats_drawColumns()
     whoaCharacterStats_showBorder()
@@ -191,28 +183,28 @@ end)
 ---------------------------------------------------
 -- CHECKBOXES
 ---------------------------------------------------
-createCheckButton(addonName, "SwitchColumnsCb", COL1_X, LINE_03_Y, "Switch Columns", "Switch the values in the left and the right column.", settings.switch,     function(self, value) whoaCharacterStats_drawColumns(value); end)
-createCheckButton(addonName, "ShowBorderCb",    COL1_X, LINE_04_Y, "Show Border",    "Show a border.",                                      settings.showBorder, function(self, value) whoaCharacterStats_showBorder(value); whoaCharacterStats_update(); end)
-createCheckButton(addonName, "HighlightCb",     COL1_X, LINE_05_Y, "Highlighting",   "Highlight increasing, or decreasing stats.",          settings.highlight,  function(self, value) settings.highlight = value; end)
+createCheckButton(addonName, "SwitchColumnsCb", COL1_X+20, LINE_04_Y, "Switch Columns", "Switch the values in the left and the right column.", settings.switch,     function(self, value) whoaCharacterStats_drawColumns(value); end)
+createCheckButton(addonName, "ShowBorderCb",    COL1_X+20, LINE_05_Y, "Show Border",    "Show a border.",                                      settings.showBorder, function(self, value) whoaCharacterStats_showBorder(value); whoaCharacterStats_update(); end)
+createCheckButton(addonName, "HighlightCb",     COL1_X+20, LINE_06_Y, "Highlighting",   "Highlight increasing, or decreasing stats.",          settings.highlight,  function(self, value) settings.highlight = value; end)
 
 ---------------------------------------------------
 -- DROPDOWNS
 ---------------------------------------------------
-createDropDown("WhoaCharacterStatsAnchorDropDown",        ANCHORS,  COL1_X-20,  LINE_01_Y, "Anchor",             function() return settings.position.a1;  end, function(value) settings.position.a1  = value; end, function() whoaCharacterStats_updatePosition(); end)
-createDropDown("WhoaCharacterStatsParentDropDown",        PARENTS,  COL2_X-80,  LINE_01_Y, "Parent",             function() return settings.position.p;   end, function(value) settings.position.p   = value; end, function() whoaCharacterStats_updatePosition(); end)
-createDropDown("WhoaCharacterStatsAnchorParentDropDown",  ANCHORS,  COL3_X-140, LINE_01_Y, "Anchor Parent",      function() return settings.position.a2;  end, function(value) settings.position.a2  = value; end, function() whoaCharacterStats_updatePosition(); end)
-createDropDown("WhoaCharacterStatsDecimalPlacesDropDown", DECIMALS, COL3_X-140, LINE_03_Y, "Decimal Places",     function() return settings.dp;           end, function(value) settings.dp           = value; end, function() whoaCharacterStats_update(); end)
-createDropDown("WhoaCharacterStatsFirstDropDown",         STATS,    COL1_X-20,  LINE_06_Y, "1st secondary stat", function() return settings.order["1st"]; end, function(value) settings.order["1st"] = value; end, function() whoaCharacterStats_drawColumns(); end)
-createDropDown("WhoaCharacterStatsSecondDropDown",        STATS,    COL1_X-20,  LINE_07_Y, "2nd secondary stat", function() return settings.order["2nd"]; end, function(value) settings.order["2nd"] = value; end, function() whoaCharacterStats_drawColumns(); end)
-createDropDown("WhoaCharacterStatsThirdDropDown",         STATS,    COL1_X-20,  LINE_08_Y, "3rd secondary stat", function() return settings.order["3rd"]; end, function(value) settings.order["3rd"] = value; end, function() whoaCharacterStats_drawColumns(); end)
-createDropDown("WhoaCharacterStatsFourthDropDown",        STATS,    COL1_X-20,  LINE_09_Y, "4th secondary stat", function() return settings.order["4th"]; end, function(value) settings.order["4th"] = value; end, function() whoaCharacterStats_drawColumns(); end)
+createDropDown("WhoaCharacterStatsAnchorDropDown",        ANCHORS,  COL1_X, LINE_01_Y, "Anchor",             function() return settings.position.a1;  end, function(value) settings.position.a1  = value; end, function() whoaCharacterStats_updatePosition(); end)
+createDropDown("WhoaCharacterStatsParentDropDown",        PARENTS,  COL1_X, LINE_02_Y, "Parent",             function() return settings.position.p;   end, function(value) settings.position.p   = value; end, function() whoaCharacterStats_updatePosition(); end)
+createDropDown("WhoaCharacterStatsAnchorParentDropDown",  ANCHORS,  COL1_X, LINE_03_Y, "Anchor Parent",      function() return settings.position.a2;  end, function(value) settings.position.a2  = value; end, function() whoaCharacterStats_updatePosition(); end)
+createDropDown("WhoaCharacterStatsDecimalPlacesDropDown", DECIMALS, COL2_X, LINE_04_Y, "Decimal Places",     function() return settings.dp;           end, function(value) settings.dp           = value; end, function() whoaCharacterStats_update(); end)
+createDropDown("WhoaCharacterStatsFirstDropDown",         STATS,    COL1_X, LINE_07_Y, "1st secondary stat", function() return settings.order["1st"]; end, function(value) settings.order["1st"] = value; end, function() whoaCharacterStats_drawColumns(); end)
+createDropDown("WhoaCharacterStatsSecondDropDown",        STATS,    COL1_X, LINE_08_Y, "2nd secondary stat", function() return settings.order["2nd"]; end, function(value) settings.order["2nd"] = value; end, function() whoaCharacterStats_drawColumns(); end)
+createDropDown("WhoaCharacterStatsThirdDropDown",         STATS,    COL1_X, LINE_09_Y, "3rd secondary stat", function() return settings.order["3rd"]; end, function(value) settings.order["3rd"] = value; end, function() whoaCharacterStats_drawColumns(); end)
+createDropDown("WhoaCharacterStatsFourthDropDown",        STATS,    COL1_X, LINE_10_Y, "4th secondary stat", function() return settings.order["4th"]; end, function(value) settings.order["4th"] = value; end, function() whoaCharacterStats_drawColumns(); end)
 
 ---------------------------------------------------
 -- SLIDER
 ---------------------------------------------------
-createSlider("whoaXSlider",       "x",       false, COL1_X,     LINE_02_Y, -200, 200, function(value) whoaCharacterStats_updatePosition(value, nil); end)
-createSlider("whoaYSlider",       "y",       false, COL2_X-60,  LINE_02_Y, -200, 200, function(value) whoaCharacterStats_updatePosition(nil, value); end)
-createSlider("whoaScalingSlider", "Scaling", true,  COL3_X-120, LINE_05_Y,   .5,   3, function(value) whoaCharacterStats_setScale(value); end)
+createSlider("whoaXSlider",       "x",       false, COL2_X, LINE_01_Y+2, -200, 200, function(value) whoaCharacterStats_updatePosition(value, nil); end)
+createSlider("whoaYSlider",       "y",       false, COL2_X, LINE_02_Y+2, -200, 200, function(value) whoaCharacterStats_updatePosition(nil, value); end)
+createSlider("whoaScalingSlider", "Scaling", true,  COL2_X, LINE_06_Y,     .5,   3, function(value) whoaCharacterStats_setScale(value); end)
 
 ---------------------------------------------------
 
@@ -297,11 +289,6 @@ function whoaCharacterStats_updateOptionPanel()
     WhoaCharacterStatsThirdDropDownText:SetText(settings.order["3rd"])
     WhoaCharacterStatsFourthDropDownText:SetText(settings.order["4th"])
 end
-
--- whoaCharacterStats.optionPanel:SetScript("OnShow", function()
---     print('optionPanel.OnShow')
---     whoaCharacterStats.optionPanel:Show()
--- end)
 
 whoaCharacterStats.optionPanel.okay = 
     function (self)
