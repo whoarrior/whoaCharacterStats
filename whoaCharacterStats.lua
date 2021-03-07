@@ -113,8 +113,10 @@ end
 local function getVersatilityText()
     local color = WHOA_LIB_COLOR_WHITE
     local v = getVersatility()
-    if versatility < v then color = WHOA_LIB_COLOR_GREEN; whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Versatility:|r "..versatility.." |cff"..WHOA_LIB_COLOR_GREEN.."<|r "..v, "DEBUG", LOG_LEVEL, ADDON) end
-    if versatility > v then color = WHOA_LIB_COLOR_RED;   whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Versatility:|r "..versatility.." |cff"..WHOA_LIB_COLOR_RED..">|r "..v,   "DEBUG", LOG_LEVEL, ADDON) end
+    if settings.highlight then
+        if versatility < v then color = WHOA_LIB_COLOR_GREEN; whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Versatility:|r "..versatility.." |cff"..WHOA_LIB_COLOR_GREEN.."<|r "..v, "DEBUG", LOG_LEVEL, ADDON) end
+        if versatility > v then color = WHOA_LIB_COLOR_RED;   whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Versatility:|r "..versatility.." |cff"..WHOA_LIB_COLOR_RED..">|r "..v,   "DEBUG", LOG_LEVEL, ADDON) end
+    end
     versatilityText.text:SetText("|cff"..color..VERSATILITY.."|r")
     return "|cff"..color..whoaRound(v, settings.dp).."%|r"
 end
