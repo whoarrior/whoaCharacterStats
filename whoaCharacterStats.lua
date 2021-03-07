@@ -229,7 +229,7 @@ local txt1 = defaults.left.txt1
 local txt2 = defaults.left.txt2
 local padding = defaults.left.padding
 local lh = defaults.lh
-local a = defaults.position.a
+local a = defaults.position.a2
 local x = defaults.position.x
 local y = defaults.position.y
 local function getY(value)
@@ -258,12 +258,17 @@ local function getY(value)
     end
 end
 
-createMainFrame("w", _G[defaults.position.p], a, x, y, col1+col2+padding, 4.4*lh+24)
-y = 4.4*lh;              createFrame("whoaCharacterStats_col1Mainstat",    w, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Mainstat",    w, col1+padding, y, col2, txt2)
-y = getY("Haste");       createFrame("whoaCharacterStats_col1Haste",       w, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Haste",       w, col1+padding, y, col2, txt2)
-y = getY("Mastery");     createFrame("whoaCharacterStats_col1Mastery",     w, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Mastery",     w, col1+padding, y, col2, txt2)
-y = getY("Crit");        createFrame("whoaCharacterStats_col1Crit",        w, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Crit",        w, col1+padding, y, col2, txt2)
-y = getY("Versatility"); createFrame("whoaCharacterStats_col1Versatility", w, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Versatility", w, col1+padding, y, col2, txt2)
+print(defaults.position.p)
+print(a)
+print(x)
+print(y)
+createMainFrame("whoaCharacterStats_main",   _G[defaults.position.p], a, x, y, col1+col2+padding, 4.4*lh+24)
+createMainFrame("whoaCharacterStats_border", _G[defaults.position.p], a, x, y, _G["whoaCharacterStats_main"]:GetWidth(), _G["whoaCharacterStats_main"]:GetHeight())
+y = 4.4*lh;              createFrame("whoaCharacterStats_col1Mainstat",    whoaCharacterStats_main, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Mainstat",    whoaCharacterStats_main, col1+padding, y, col2, txt2)
+y = getY("Haste");       createFrame("whoaCharacterStats_col1Haste",       whoaCharacterStats_main, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Haste",       whoaCharacterStats_main, col1+padding, y, col2, txt2)
+y = getY("Mastery");     createFrame("whoaCharacterStats_col1Mastery",     whoaCharacterStats_main, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Mastery",     whoaCharacterStats_main, col1+padding, y, col2, txt2)
+y = getY("Crit");        createFrame("whoaCharacterStats_col1Crit",        whoaCharacterStats_main, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Crit",        whoaCharacterStats_main, col1+padding, y, col2, txt2)
+y = getY("Versatility"); createFrame("whoaCharacterStats_col1Versatility", whoaCharacterStats_main, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Versatility", whoaCharacterStats_main, col1+padding, y, col2, txt2)
 
 local function setColumns(v)
     if (v == nil) then
@@ -278,32 +283,32 @@ local function setColumns(v)
         txt1 = defaults.right.txt1  -- # text alignment column 1
         txt2 = defaults.right.txt2  -- # text alignment column 2
         padding = defaults.right.padding
-        y = 4.4*lh;              statValue = whoaCharacterStats_col2Mainstat;           statValue:SetWidth(col2);        statValue.text:SetJustifyH(txt1);        statValue:SetPoint(       "BOTTOMLEFT", w, "BOTTOMLEFT", col1+padding, y)
-                                 statText = whoaCharacterStats_col1Mainstat;            statText:SetWidth(col1);         statText.text:SetJustifyH(txt2);         statText:SetPoint(        "BOTTOMLEFT", w, "BOTTOMLEFT",            0, y)
-        y = getY("Haste");       hasteValue = whoaCharacterStats_col2Haste;             hasteValue:SetWidth(col2);       hasteValue.text:SetJustifyH(txt1);       hasteValue:SetPoint(      "BOTTOMLEFT", w, "BOTTOMLEFT", col1+padding, y)
-                                 hasteText = whoaCharacterStats_col1Haste;              hasteText:SetWidth(col1);        hasteText.text:SetJustifyH(txt2);        hasteText:SetPoint(       "BOTTOMLEFT", w, "BOTTOMLEFT",            0, y)
-        y = getY("Mastery");     masteryValue = whoaCharacterStats_col2Mastery;         masteryValue:SetWidth(col2);     masteryValue.text:SetJustifyH(txt1);     masteryValue:SetPoint(    "BOTTOMLEFT", w, "BOTTOMLEFT", col1+padding, y)
-                                 masteryText = whoaCharacterStats_col1Mastery;          masteryText:SetWidth(col1);      masteryText.text:SetJustifyH(txt2);      masteryText:SetPoint(     "BOTTOMLEFT", w, "BOTTOMLEFT",            0, y)
-        y = getY("Crit");        critValue = whoaCharacterStats_col2Crit;               critValue:SetWidth(col2);        critValue.text:SetJustifyH(txt1);        critValue:SetPoint(       "BOTTOMLEFT", w, "BOTTOMLEFT", col1+padding, y)
-                                 critText = whoaCharacterStats_col1Crit;                critText:SetWidth(col1);         critText.text:SetJustifyH(txt2);         critText:SetPoint(        "BOTTOMLEFT", w, "BOTTOMLEFT",            0, y)
-        y = getY("Versatility"); versatilityValue = whoaCharacterStats_col2Versatility; versatilityValue:SetWidth(col2); versatilityValue.text:SetJustifyH(txt1); versatilityValue:SetPoint("BOTTOMLEFT", w, "BOTTOMLEFT", col1+padding, y)
-                                 versatilityText = whoaCharacterStats_col1Versatility;  versatilityText:SetWidth(col1);  versatilityText.text:SetJustifyH(txt2);  versatilityText:SetPoint( "BOTTOMLEFT", w, "BOTTOMLEFT",            0, y)
+        y = 4.4*lh;              statValue = whoaCharacterStats_col2Mainstat;           statValue:SetWidth(col2);        statValue.text:SetJustifyH(txt1);        statValue:SetPoint(       "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT", col1+padding, y)
+                                 statText = whoaCharacterStats_col1Mainstat;            statText:SetWidth(col1);         statText.text:SetJustifyH(txt2);         statText:SetPoint(        "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT",            0, y)
+        y = getY("Haste");       hasteValue = whoaCharacterStats_col2Haste;             hasteValue:SetWidth(col2);       hasteValue.text:SetJustifyH(txt1);       hasteValue:SetPoint(      "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT", col1+padding, y)
+                                 hasteText = whoaCharacterStats_col1Haste;              hasteText:SetWidth(col1);        hasteText.text:SetJustifyH(txt2);        hasteText:SetPoint(       "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT",            0, y)
+        y = getY("Mastery");     masteryValue = whoaCharacterStats_col2Mastery;         masteryValue:SetWidth(col2);     masteryValue.text:SetJustifyH(txt1);     masteryValue:SetPoint(    "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT", col1+padding, y)
+                                 masteryText = whoaCharacterStats_col1Mastery;          masteryText:SetWidth(col1);      masteryText.text:SetJustifyH(txt2);      masteryText:SetPoint(     "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT",            0, y)
+        y = getY("Crit");        critValue = whoaCharacterStats_col2Crit;               critValue:SetWidth(col2);        critValue.text:SetJustifyH(txt1);        critValue:SetPoint(       "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT", col1+padding, y)
+                                 critText = whoaCharacterStats_col1Crit;                critText:SetWidth(col1);         critText.text:SetJustifyH(txt2);         critText:SetPoint(        "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT",            0, y)
+        y = getY("Versatility"); versatilityValue = whoaCharacterStats_col2Versatility; versatilityValue:SetWidth(col2); versatilityValue.text:SetJustifyH(txt1); versatilityValue:SetPoint("BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT", col1+padding, y)
+                                 versatilityText = whoaCharacterStats_col1Versatility;  versatilityText:SetWidth(col1);  versatilityText.text:SetJustifyH(txt2);  versatilityText:SetPoint( "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT",            0, y)
     else
         col1 = defaults.left.col1  -- # column width
         col2 = defaults.left.col2  -- # column width
         txt1 = defaults.left.txt1  -- # text alignment column 1
         txt2 = defaults.left.txt2  -- # text alignment column 2
         padding = defaults.left.padding
-        y = 4.4*lh;              statValue = whoaCharacterStats_col1Mainstat;           statValue:SetWidth(col1);        statValue.text:SetJustifyH(txt1);        statValue:SetPoint(       "BOTTOMLEFT", w, "BOTTOMLEFT",            0, y)
-                                 statText = whoaCharacterStats_col2Mainstat;            statText:SetWidth(col2);         statText.text:SetJustifyH(txt2);         statText:SetPoint(        "BOTTOMLEFT", w, "BOTTOMLEFT", col1+padding, y)
-        y = getY("Haste");       hasteValue = whoaCharacterStats_col1Haste;             hasteValue:SetWidth(col1);       hasteValue.text:SetJustifyH(txt1);       hasteValue:SetPoint(      "BOTTOMLEFT", w, "BOTTOMLEFT",            0, y)
-                                 hasteText = whoaCharacterStats_col2Haste;              hasteText:SetWidth(col2);        hasteText.text:SetJustifyH(txt2);        hasteText:SetPoint(       "BOTTOMLEFT", w, "BOTTOMLEFT", col1+padding, y)
-        y = getY("Mastery");     masteryValue = whoaCharacterStats_col1Mastery;         masteryValue:SetWidth(col1);     masteryValue.text:SetJustifyH(txt1);     masteryValue:SetPoint(    "BOTTOMLEFT", w, "BOTTOMLEFT",            0, y)
-                                 masteryText = whoaCharacterStats_col2Mastery;          masteryText:SetWidth(col2);      masteryText.text:SetJustifyH(txt2);      masteryText:SetPoint(     "BOTTOMLEFT", w, "BOTTOMLEFT", col1+padding, y)
-        y = getY("Crit");        critValue = whoaCharacterStats_col1Crit;               critValue:SetWidth(col1);        critValue.text:SetJustifyH(txt1);        critValue:SetPoint(       "BOTTOMLEFT", w, "BOTTOMLEFT",            0, y)
-                                 critText = whoaCharacterStats_col2Crit;                critText:SetWidth(col2);         critText.text:SetJustifyH(txt2);         critText:SetPoint(        "BOTTOMLEFT", w, "BOTTOMLEFT", col1+padding, y)
-        y = getY("Versatility"); versatilityValue = whoaCharacterStats_col1Versatility; versatilityValue:SetWidth(col1); versatilityValue.text:SetJustifyH(txt1); versatilityValue:SetPoint("BOTTOMLEFT", w, "BOTTOMLEFT",            0, y)
-                                 versatilityText = whoaCharacterStats_col2Versatility;  versatilityText:SetWidth(col2);  versatilityText.text:SetJustifyH(txt2);  versatilityText:SetPoint( "BOTTOMLEFT", w, "BOTTOMLEFT", col1+padding, y)
+        y = 4.4*lh;              statValue = whoaCharacterStats_col1Mainstat;           statValue:SetWidth(col1);        statValue.text:SetJustifyH(txt1);        statValue:SetPoint(       "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT",            0, y)
+                                 statText = whoaCharacterStats_col2Mainstat;            statText:SetWidth(col2);         statText.text:SetJustifyH(txt2);         statText:SetPoint(        "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT", col1+padding, y)
+        y = getY("Haste");       hasteValue = whoaCharacterStats_col1Haste;             hasteValue:SetWidth(col1);       hasteValue.text:SetJustifyH(txt1);       hasteValue:SetPoint(      "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT",            0, y)
+                                 hasteText = whoaCharacterStats_col2Haste;              hasteText:SetWidth(col2);        hasteText.text:SetJustifyH(txt2);        hasteText:SetPoint(       "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT", col1+padding, y)
+        y = getY("Mastery");     masteryValue = whoaCharacterStats_col1Mastery;         masteryValue:SetWidth(col1);     masteryValue.text:SetJustifyH(txt1);     masteryValue:SetPoint(    "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT",            0, y)
+                                 masteryText = whoaCharacterStats_col2Mastery;          masteryText:SetWidth(col2);      masteryText.text:SetJustifyH(txt2);      masteryText:SetPoint(     "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT", col1+padding, y)
+        y = getY("Crit");        critValue = whoaCharacterStats_col1Crit;               critValue:SetWidth(col1);        critValue.text:SetJustifyH(txt1);        critValue:SetPoint(       "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT",            0, y)
+                                 critText = whoaCharacterStats_col2Crit;                critText:SetWidth(col2);         critText.text:SetJustifyH(txt2);         critText:SetPoint(        "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT", col1+padding, y)
+        y = getY("Versatility"); versatilityValue = whoaCharacterStats_col1Versatility; versatilityValue:SetWidth(col1); versatilityValue.text:SetJustifyH(txt1); versatilityValue:SetPoint("BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT",            0, y)
+                                 versatilityText = whoaCharacterStats_col2Versatility;  versatilityText:SetWidth(col2);  versatilityText.text:SetJustifyH(txt2);  versatilityText:SetPoint( "BOTTOMLEFT", whoaCharacterStats_main, "BOTTOMLEFT", col1+padding, y)
     end
 end
 
@@ -332,13 +337,19 @@ end
 -- SETTINGS FUNCTIONS
 ---------------------------------------------------
 function whoaCharacterStats_setScale(v)
+    local scale
     if v == nil and settings.scale == nil then
-        w:SetScale(defaults.scale)
+        scale = defaults.scale
     elseif v == nil then
-        w:SetScale(settings.scale)
+        scale = settings.scale
     else
+        scale = v
         settings.scale = v
-        w:SetScale(v)
+    end
+    whoaCharacterStats_main:SetScale(scale)
+    if settings.showBorder then
+        whoaCharacterStats_border:SetWidth(whoaCharacterStats_main:GetWidth() * scale)
+        whoaCharacterStats_border:SetHeight(whoaCharacterStats_main:GetHeight() * scale)
     end
 end
 function whoaCharacterStats_defaultScale() 
@@ -351,11 +362,11 @@ local function showBorder(v)
     or (v == nil and settings.showBorder)
     or (v)
     then
-        -- w:SetBackdrop(BACKDROP_SLIDER_8_8)
-        w:SetBackdrop(BACKDROP_TEXT_PANEL_0_16)
-        -- w:SetBackdrop(BACKDROP_TOOLTIP_0_12_0055)
+        -- whoaCharacterStats_border:SetBackdrop(BACKDROP_SLIDER_8_8)
+        whoaCharacterStats_border:SetBackdrop(BACKDROP_TEXT_PANEL_0_16)
+        -- whoaCharacterStats_border:SetBackdrop(BACKDROP_TOOLTIP_0_12_0055)
     else
-        w:SetBackdrop()
+        whoaCharacterStats_border:SetBackdrop()
     end
 end
 function whoaCharacterStats_showBorder(v)
@@ -374,24 +385,24 @@ function whoaCharacterStats_drawColumns(v)
 end
 
 function whoaCharacterStats_defaultPosition()
-    w:ClearAllPoints()
+    whoaCharacterStats_main:ClearAllPoints()
     settings.position.a1 = defaults.position.a1
     settings.position.p  = defaults.position.p
     settings.position.a2 = defaults.position.a2
     settings.position.x  = defaults.position.x
     settings.position.y  = defaults.position.y
-    w:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
+    whoaCharacterStats_main:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
     whoaCharacterStats_updateOptionPanel()
 end
 
 function whoaCharacterStats_centerPosition()
-    w:ClearAllPoints()
+    whoaCharacterStats_main:ClearAllPoints()
     settings.position.a1 = "CENTER"
     settings.position.p  = "UIParent"
     settings.position.a2 = "CENTER"
     settings.position.x  = 0
     settings.position.y  = 0
-    w:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
+    whoaCharacterStats_main:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
     whoaCharacterStats_updateOptionPanel()
 end
 
@@ -404,14 +415,14 @@ function whoaCharacterStats_updatePosition(x, y)
     elseif (x == nil and y ~= nil) then
         settings.position.y = y
     end
-    w:ClearAllPoints()
-    w:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
+    whoaCharacterStats_main:ClearAllPoints()
+    whoaCharacterStats_main:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
 end
 
 local function init()
     settings = whoaCharacterStats_getSettings()
-    w:ClearAllPoints()
-    w:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
+    whoaCharacterStats_main:ClearAllPoints()
+    whoaCharacterStats_main:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
     showBorder(settings.showBorder)
     setColumns(settings.switch)
 end
@@ -419,13 +430,13 @@ end
 ---------------------------------------------------
 -- EVENTS
 ---------------------------------------------------
---local w = CreateFrame("Frame", nil, UIParent)
-w:RegisterEvent("PLAYER_LOGIN")
-w:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
-w:RegisterEvent("UNIT_AURA")
--- w:RegisterEvent("ADDON_LOADED")
-w:RegisterEvent("VARIABLES_LOADED")
-function w:OnEvent(event, ...)
+--local whoaCharacterStats_main = CreateFrame("Frame", nil, UIParent)
+whoaCharacterStats_main:RegisterEvent("PLAYER_LOGIN")
+whoaCharacterStats_main:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+whoaCharacterStats_main:RegisterEvent("UNIT_AURA")
+-- whoaCharacterStats_main:RegisterEvent("ADDON_LOADED")
+whoaCharacterStats_main:RegisterEvent("VARIABLES_LOADED")
+function whoaCharacterStats_main:OnEvent(event, ...)
     if event == "PLAYER_LOGIN" then
         whoaLog("PLAYER_LOGIN", "DEBUG", LOG_LEVEL, ADDON)
         SlashCmdList['RELOAD'] = function() ReloadUI() end
@@ -437,7 +448,7 @@ function w:OnEvent(event, ...)
     --     local addonName = ...
     --     whoaLog("ADDON_LOADED:"..addonName, "DEBUG", LOG_LEVEL, ADDON)
     --     if addonName == "whoaCharacterStats" then
-    --         w:UnregisterEvent("ADDON_LOADED")
+    --         whoaCharacterStats_main:UnregisterEvent("ADDON_LOADED")
     --     end
     elseif event == "VARIABLES_LOADED" then
         whoaLog("VARIABLES_LOADED", "DEBUG", LOG_LEVEL, ADDON)
@@ -454,7 +465,7 @@ function w:OnEvent(event, ...)
         end
     end
 end
-w:SetScript("OnEvent", w.OnEvent)
+whoaCharacterStats_main:SetScript("OnEvent", whoaCharacterStats_main.OnEvent)
 
 ---------------------------------------------------
 -- ONUPDATE TIMER
@@ -472,4 +483,4 @@ local function onUpdate(self, elapsed)
         end
     end
 end
-w:SetScript("OnUpdate", onUpdate)
+whoaCharacterStats_main:SetScript("OnUpdate", onUpdate)
