@@ -16,7 +16,7 @@ whoaCharacterStats.defaults = {
     dp = 0,
     scale = 1,
     left = {
-        col1 = 42,      -- # column width
+        col1 = 46,      -- # column width
         col2 = 64,      -- # column width
         txt1 = "RIGHT", -- # text alignment column 1
         txt2 = "LEFT",  -- # text alignment column 2
@@ -24,7 +24,7 @@ whoaCharacterStats.defaults = {
     },
     right = {
         col1 = 64,      -- # column width
-        col2 = 42,      -- # column width
+        col2 = 46,      -- # column width
         txt1 = "RIGHT", -- # text alignment column 1
         txt2 = "RIGHT", -- # text alignment column 2
         padding = -3,

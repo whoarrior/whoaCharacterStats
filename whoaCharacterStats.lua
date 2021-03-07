@@ -258,10 +258,6 @@ local function getY(value)
     end
 end
 
-print(defaults.position.p)
-print(a)
-print(x)
-print(y)
 createMainFrame("whoaCharacterStats_main",   _G[defaults.position.p], a, x, y, col1+col2+padding, 4.4*lh+24)
 createMainFrame("whoaCharacterStats_border", _G[defaults.position.p], a, x, y, _G["whoaCharacterStats_main"]:GetWidth(), _G["whoaCharacterStats_main"]:GetHeight())
 y = 4.4*lh;              createFrame("whoaCharacterStats_col1Mainstat",    whoaCharacterStats_main, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Mainstat",    whoaCharacterStats_main, col1+padding, y, col2, txt2)
@@ -347,10 +343,10 @@ function whoaCharacterStats_setScale(v)
         settings.scale = v
     end
     whoaCharacterStats_main:SetScale(scale)
-    if settings.showBorder then
-        whoaCharacterStats_border:SetWidth(whoaCharacterStats_main:GetWidth() * scale)
-        whoaCharacterStats_border:SetHeight(whoaCharacterStats_main:GetHeight() * scale)
-    end
+    whoaCharacterStats_border:SetWidth(whoaCharacterStats_main:GetWidth() * scale)
+    whoaCharacterStats_border:SetHeight(whoaCharacterStats_main:GetHeight() * scale)
+    whoaCharacterStats_border:ClearAllPoints()
+    whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x * scale, settings.y * scale)
 end
 function whoaCharacterStats_defaultScale() 
     whoaCharacterStats_setScale(defaults.scale)
@@ -385,44 +381,52 @@ function whoaCharacterStats_drawColumns(v)
 end
 
 function whoaCharacterStats_defaultPosition()
+    settings.a1 = defaults.position.a1
+    settings.p  = defaults.position.p
+    settings.a2 = defaults.position.a2
+    settings.x  = defaults.position.x
+    settings.y  = defaults.position.y
     whoaCharacterStats_main:ClearAllPoints()
-    settings.position.a1 = defaults.position.a1
-    settings.position.p  = defaults.position.p
-    settings.position.a2 = defaults.position.a2
-    settings.position.x  = defaults.position.x
-    settings.position.y  = defaults.position.y
-    whoaCharacterStats_main:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
+    whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+    whoaCharacterStats_border:ClearAllPoints()
+    whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
     whoaCharacterStats_updateOptionPanel()
 end
 
 function whoaCharacterStats_centerPosition()
+    settings.a1 = "CENTER"
+    settings.p  = "UIParent"
+    settings.a2 = "CENTER"
+    settings.x  = 0
+    settings.y  = 0
     whoaCharacterStats_main:ClearAllPoints()
-    settings.position.a1 = "CENTER"
-    settings.position.p  = "UIParent"
-    settings.position.a2 = "CENTER"
-    settings.position.x  = 0
-    settings.position.y  = 0
-    whoaCharacterStats_main:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
+    whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+    whoaCharacterStats_border:ClearAllPoints()
+    whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
     whoaCharacterStats_updateOptionPanel()
 end
 
 function whoaCharacterStats_updatePosition(x, y)
     if (x ~= nil and y ~= nil) then
-        settings.position.x = x
-        settings.position.y = y
+        settings.x = x
+        settings.y = y
     elseif (x ~= nil and y == nil) then
-        settings.position.x = x
+        settings.x = x
     elseif (x == nil and y ~= nil) then
-        settings.position.y = y
+        settings.y = y
     end
     whoaCharacterStats_main:ClearAllPoints()
-    whoaCharacterStats_main:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
+    whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+    whoaCharacterStats_border:ClearAllPoints()
+    whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x * settings.scale, settings.y * settings.scale)
 end
 
 local function init()
     settings = whoaCharacterStats_getSettings()
     whoaCharacterStats_main:ClearAllPoints()
-    whoaCharacterStats_main:SetPoint(settings.position.a1, settings.position.p, settings.position.a2, settings.position.x, settings.position.y)
+    whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+    whoaCharacterStats_border:ClearAllPoints()
+    whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x * settings.scale, settings.y * settings.scale)
     showBorder(settings.showBorder)
     setColumns(settings.switch)
 end

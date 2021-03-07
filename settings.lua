@@ -190,9 +190,9 @@ createCheckButton(addonName, "HighlightCb",     COL1_X+20, LINE_06_Y, "Highlight
 ---------------------------------------------------
 -- DROPDOWNS
 ---------------------------------------------------
-createDropDown("WhoaCharacterStatsAnchorDropDown",        ANCHORS,  COL1_X, LINE_01_Y, "Anchor",             function() return settings.position.a1;  end, function(value) settings.position.a1  = value; end, function() whoaCharacterStats_updatePosition(); end)
-createDropDown("WhoaCharacterStatsParentDropDown",        PARENTS,  COL1_X, LINE_02_Y, "Parent",             function() return settings.position.p;   end, function(value) settings.position.p   = value; end, function() whoaCharacterStats_updatePosition(); end)
-createDropDown("WhoaCharacterStatsAnchorParentDropDown",  ANCHORS,  COL1_X, LINE_03_Y, "Anchor Parent",      function() return settings.position.a2;  end, function(value) settings.position.a2  = value; end, function() whoaCharacterStats_updatePosition(); end)
+createDropDown("WhoaCharacterStatsAnchorDropDown",        ANCHORS,  COL1_X, LINE_01_Y, "Anchor",             function() return settings.a1;           end, function(value) settings.a1           = value; end, function() whoaCharacterStats_updatePosition(); end)
+createDropDown("WhoaCharacterStatsParentDropDown",        PARENTS,  COL1_X, LINE_02_Y, "Parent",             function() return settings.p;            end, function(value) settings.p            = value; end, function() whoaCharacterStats_updatePosition(); end)
+createDropDown("WhoaCharacterStatsAnchorParentDropDown",  ANCHORS,  COL1_X, LINE_03_Y, "Anchor Parent",      function() return settings.a2;           end, function(value) settings.a2           = value; end, function() whoaCharacterStats_updatePosition(); end)
 createDropDown("WhoaCharacterStatsDecimalPlacesDropDown", DECIMALS, COL2_X, LINE_04_Y, "Decimal Places",     function() return settings.dp;           end, function(value) settings.dp           = value; end, function() whoaCharacterStats_update(); end)
 createDropDown("WhoaCharacterStatsFirstDropDown",         STATS,    COL1_X, LINE_07_Y, "1st secondary stat", function() return settings.order["1st"]; end, function(value) settings.order["1st"] = value; end, function() whoaCharacterStats_drawColumns(); end)
 createDropDown("WhoaCharacterStatsSecondDropDown",        STATS,    COL1_X, LINE_08_Y, "2nd secondary stat", function() return settings.order["2nd"]; end, function(value) settings.order["2nd"] = value; end, function() whoaCharacterStats_drawColumns(); end)
@@ -232,11 +232,11 @@ function whoaCharacterStats_setDefaults()
     settings.order["2nd"] = defaults.order["2nd"]
     settings.order["3rd"] = defaults.order["3rd"]
     settings.order["4th"] = defaults.order["4th"]
-    settings.position.a1  = defaults.position.a1
-    settings.position.p   = defaults.position.p
-    settings.position.a2  = defaults.position.a2
-    settings.position.x   = defaults.position.x
-    settings.position.y   = defaults.position.y
+    settings.a1           = defaults.position.a1
+    settings.p            = defaults.position.p
+    settings.a2           = defaults.position.a2
+    settings.x            = defaults.position.x
+    settings.y            = defaults.position.y
 end
 
 function whoaCharacterStats_getSettings()
@@ -263,23 +263,21 @@ function whoaCharacterStats_getSettings()
     if settings.order["2nd"] == nil then settings.order["2nd"] = defaults.order["2nd"]  end
     if settings.order["3rd"] == nil then settings.order["3rd"] = defaults.order["3rd"]  end
     if settings.order["4th"] == nil then settings.order["4th"] = defaults.order["4th"]  end
-    if settings.position     == nil then
-        settings.position.a1 = defaults.position.a1
-        settings.position.p  = defaults.position.p
-        settings.position.a2 = defaults.position.a2
-        settings.position.x  = defaults.position.x
-        settings.position.y  = defaults.position.y
-    end
+    if settings.a1           == nil then settings.a1           = defaults.position.a1   end
+    if settings.p            == nil then settings.p            = defaults.position.p    end
+    if settings.a2           == nil then settings.a2           = defaults.position.a2   end
+    if settings.x            == nil then settings.x            = defaults.position.x    end
+    if settings.y            == nil then settings.y            = defaults.position.y    end
     return settings
 end
 
 function whoaCharacterStats_updateOptionPanel()
     whoaScalingSlider:SetValue(settings.scale)
-    WhoaCharacterStatsAnchorDropDownText:SetText(settings.position.a1)
-    WhoaCharacterStatsParentDropDownText:SetText(settings.position.p)
-    WhoaCharacterStatsAnchorParentDropDownText:SetText(settings.position.a2)
-    whoaXSlider:SetValue(settings.position.x)
-    whoaYSlider:SetValue(settings.position.y)
+    WhoaCharacterStatsAnchorDropDownText:SetText(settings.a1)
+    WhoaCharacterStatsParentDropDownText:SetText(settings.p)
+    WhoaCharacterStatsAnchorParentDropDownText:SetText(settings.a2)
+    whoaXSlider:SetValue(settings.x)
+    whoaYSlider:SetValue(settings.y)
     whoaCharacterStatsSwitchColumnsCb:SetChecked(settings.switch)
     whoaCharacterStatsShowBorderCb:SetChecked(settings.showBorder)
     whoaCharacterStatsHighlightCb:SetChecked(settings.highlight)
