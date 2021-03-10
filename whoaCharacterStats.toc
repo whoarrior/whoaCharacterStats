@@ -1,8 +1,8 @@
-## Interface: 90002
+## Interface: 90005
 ## Title: whoa |cFFFFFFFFCharacterStats|r
 ## Notes: A simple textpanel with your stats.
 ## Author: whoa
-## Version: 9.0.2.3
+## Version: 9.0.5.1
 ## Dependencies: whoaLibrary
 ## SavedVariables: settings
 
