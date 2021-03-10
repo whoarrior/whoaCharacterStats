@@ -3,7 +3,8 @@ local addonName, addon = ...
 settings = {}
 
 local ADDON = ADDON_NAME
-local NAME = "whoa |cFFFFFFFFCharacterStats|r"
+local NAME = GetAddOnMetadata(addonName, "Title")
+local VERSION = GetAddOnMetadata(addonName, "Version")
 local REPO = "https://github.com/whoarrior/whoaCharacterStats"
 local defaults = whoaCharacterStats.defaults
 local _, class = UnitClass("player")
@@ -159,7 +160,7 @@ end
 whoaCharacterStats.optionPanel = CreateFrame("Frame", "whoaCharacterStats.optionPanel", UIParent)
 local title = whoaCharacterStats.optionPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 title:SetPoint(ANCHOR, x, y)
-title:SetText(NAME)
+title:SetText(NAME.." "..VERSION)
 local repoLink = whoaCharacterStats.optionPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
 repoLink:SetPoint(ANCHOR, x, y-20)
 repoLink:SetText(REPO)
