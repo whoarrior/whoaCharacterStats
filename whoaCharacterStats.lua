@@ -106,6 +106,10 @@ local CLASSES = {
     },
 }
 
+-- # Getter
+local function getDecimalPlaces() if charSettings.enabled then return charSettings.dp    else return settings.dp    end end
+local function getOrder()         if charSettings.enabled then return charSettings.order else return settings.order end end
+
 -- # Versatilty
 local function getVersatility()
     return GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE)
@@ -113,12 +117,14 @@ end
 local function getVersatilityText()
     local color = WHOA_LIB_COLOR_WHITE
     local v = getVersatility()
-    if settings.highlight then
+    if (charSettings.enabled and charSettings.highlight)
+    or (not charSettings.enabled and settings.highlight)
+    then
         if versatility < v then color = WHOA_LIB_COLOR_GREEN; whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Versatility:|r "..versatility.." |cff"..WHOA_LIB_COLOR_GREEN.."<|r "..v, "DEBUG", LOG_LEVEL, ADDON) end
         if versatility > v then color = WHOA_LIB_COLOR_RED;   whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Versatility:|r "..versatility.." |cff"..WHOA_LIB_COLOR_RED..">|r "..v,   "DEBUG", LOG_LEVEL, ADDON) end
     end
     versatilityText.text:SetText("|cff"..color..VERSATILITY.."|r")
-    return "|cff"..color..whoaRound(v, settings.dp).."%|r"
+    return "|cff"..color..whoaRound(v, getDecimalPlaces()).."%|r"
 end
 
 -- # Mastery
@@ -128,12 +134,14 @@ end
 local function getMasteryText()
     local color = WHOA_LIB_COLOR_WHITE
     local m = getMastery()
-    if settings.highlight then
+    if (charSettings.enabled and charSettings.highlight)
+    or (not charSettings.enabled and settings.highlight)
+    then
         if mastery < m then color = WHOA_LIB_COLOR_GREEN; whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Mastery:|r "..mastery.." |cff"..WHOA_LIB_COLOR_GREEN.."<|r "..m, "DEBUG", LOG_LEVEL, ADDON) end
         if mastery > m then color = WHOA_LIB_COLOR_RED;   whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Mastery:|r "..mastery.." |cff"..WHOA_LIB_COLOR_RED..">|r "..m,   "DEBUG", LOG_LEVEL, ADDON) end
     end
     masteryText.text:SetText("|cff"..color..MASTERY.."|r")
-    return "|cff"..color..whoaRound(m, settings.dp).."%|r"
+    return "|cff"..color..whoaRound(m, getDecimalPlaces()).."%|r"
 end
 
 -- # Crit
@@ -145,12 +153,14 @@ end
 local function getCritText()
     local color = WHOA_LIB_COLOR_WHITE
     local c = getCrit()
-    if settings.highlight then
+    if (charSettings.enabled and charSettings.highlight)
+    or (not charSettings.enabled and settings.highlight)
+    then
         if crit < c then color = WHOA_LIB_COLOR_GREEN; whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Crit:|r "..crit.." |cff"..WHOA_LIB_COLOR_GREEN.."<|r "..c, "DEBUG", LOG_LEVEL, ADDON) end
         if crit > c then color = WHOA_LIB_COLOR_RED;   whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Crit:|r "..crit.." |cff"..WHOA_LIB_COLOR_RED..">|r "..c,   "DEBUG", LOG_LEVEL, ADDON) end
     end
     critText.text:SetText("|cff"..color..CRIT.."|r")
-    return "|cff"..color..whoaRound(c, settings.dp).."%|r"
+    return "|cff"..color..whoaRound(c, getDecimalPlaces()).."%|r"
 end
 
 -- # Haste
@@ -167,12 +177,14 @@ end
 local function getHasteText()
     local color = WHOA_LIB_COLOR_WHITE
     local h = getHaste()
-    if settings.highlight then
+    if (charSettings.enabled and charSettings.highlight)
+    or (not charSettings.enabled and settings.highlight)
+    then
         if haste < h then color = WHOA_LIB_COLOR_GREEN; whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Haste:|r "..haste.." |cff"..WHOA_LIB_COLOR_GREEN.."<|r "..h, "DEBUG", LOG_LEVEL, ADDON) end
         if haste > h then color = WHOA_LIB_COLOR_RED;   whoaLog("|cff"..WHOA_LIB_COLOR_GOLD.."Haste:|r "..haste.." |cff"..WHOA_LIB_COLOR_RED..">|r "..h,   "DEBUG", LOG_LEVEL, ADDON) end
     end
     hasteText.text:SetText("|cff"..color..HASTE.."|r")
-    return "|cff"..color..whoaRound(h, settings.dp).."%|r"
+    return "|cff"..color..whoaRound(h, getDecimalPlaces()).."%|r"
 end
 
 -- # MainStat
@@ -192,7 +204,9 @@ end
 local function getPowerText()
     local color = WHOA_LIB_COLOR_WHITE
     local p = getPower()
-    if settings.highlight then
+    if (charSettings.enabled and charSettings.highlight)
+    or (not charSettings.enabled and settings.highlight)
+    then
         if stat < p then color = WHOA_LIB_COLOR_GREEN; whoaLog("|cff"..WHOA_LIB_COLOR_GOLD..getMainStat()..":|r "..stat.." |cff"..WHOA_LIB_COLOR_GREEN.."<|r "..p, "DEBUG", LOG_LEVEL, ADDON) end
         if stat > p then color = WHOA_LIB_COLOR_RED;   whoaLog("|cff"..WHOA_LIB_COLOR_GOLD..getMainStat()..":|r "..stat.." |cff"..WHOA_LIB_COLOR_RED..">|r "..p,   "DEBUG", LOG_LEVEL, ADDON) end
     end
@@ -234,10 +248,9 @@ local x = defaults.position.x
 local y = defaults.position.y
 local function getY(value)
     local o = ""
-    if settings.order == nil then
-        settings.order = defaults.order
-    end
-    for k, v in pairs(settings.order) do
+    if charSettings.order == nil then charSettings.order = defaults.order end
+    if settings.order     == nil then settings.order     = defaults.order end
+    for k, v in pairs(getOrder()) do
         if v == value then
             o = k
         end
@@ -252,7 +265,11 @@ local function getY(value)
         return 4
     else
         whoaLog("configuration fail:|r", "WARN", LOG_LEVEL, ADDON)
-        whoaLog("|r1st "..settings.order["1st"]..", 2nd "..settings.order["2nd"]..", 3rd "..settings.order["3rd"]..", 4th "..settings.order["4th"], "WARN", LOG_LEVEL, ADDON)
+        if charSettings.enabled then
+            whoaLog("|r1st "..charSettings.order["1st"]..", 2nd "..charSettings.order["2nd"]..", 3rd "..charSettings.order["3rd"]..", 4th "..charSettings.order["4th"], "WARN", LOG_LEVEL, ADDON)
+        else
+            whoaLog("|r1st "..settings.order["1st"]..", 2nd "..settings.order["2nd"]..", 3rd "..settings.order["3rd"]..", 4th "..settings.order["4th"], "WARN", LOG_LEVEL, ADDON)
+        end
         whoaLog("|r|cff"..WHOA_LIB_COLOR_RED..value.."|r is not configured!", "WARN", LOG_LEVEL, ADDON)
         return 4
     end
@@ -267,13 +284,19 @@ y = getY("Crit");        createFrame("whoaCharacterStats_col1Crit",        whoaC
 y = getY("Versatility"); createFrame("whoaCharacterStats_col1Versatility", whoaCharacterStats_main, 0, y, col1, txt1); createFrame("whoaCharacterStats_col2Versatility", whoaCharacterStats_main, col1+padding, y, col2, txt2)
 
 local function setColumns(v)
-    if (v == nil) then
+    if (charSettings.enabled and v == nil) then
+        charSettings.switch = defaults.switch
+    elseif charSettings.enabled then
+        charSettings.switch = v
+    elseif v == nil then
         settings.switch = defaults.switch
     else
         settings.switch = v
     end
     
-    if settings.switch then
+    if (charSettings.enabled and charSettings.switch)
+    or (not charSettings.enabled and settings.switch)
+    then
         col1 = defaults.right.col1  -- # column width
         col2 = defaults.right.col2  -- # column width
         txt1 = defaults.right.txt1  -- # text alignment column 1
@@ -334,19 +357,33 @@ end
 ---------------------------------------------------
 function whoaCharacterStats_setScale(v)
     local scale
-    if v == nil and settings.scale == nil then
+    if (charSettings.enabled and v == nil and charSettings.scale == nil)
+    or (not charSettings.enabled and v == nil and settings.scale == nil)
+    then
         scale = defaults.scale
-    elseif v == nil then
+    elseif (charSettings.enabled and v == nil)
+    then
+        scale = charSettings.scale
+    elseif (v == nil)
+    then
         scale = settings.scale
     else
         scale = v
-        settings.scale = v
+        if charSettings.enabled then
+            charSettings.scale = v
+        else
+            settings.scale = v
+        end
     end
     whoaCharacterStats_main:SetScale(scale)
     whoaCharacterStats_border:SetWidth(whoaCharacterStats_main:GetWidth() * scale)
     whoaCharacterStats_border:SetHeight(whoaCharacterStats_main:GetHeight() * scale)
     whoaCharacterStats_border:ClearAllPoints()
-    whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x * scale, settings.y * scale)
+    if charSettings.enabled then
+        whoaCharacterStats_border:SetPoint(charSettings.a1, charSettings.p, charSettings.a2, charSettings.x * scale, charSettings.y * scale)
+    else
+        whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x * scale, settings.y * scale)
+    end
 end
 function whoaCharacterStats_defaultScale() 
     whoaCharacterStats_setScale(defaults.scale)
@@ -354,8 +391,10 @@ function whoaCharacterStats_defaultScale()
 end
 
 local function showBorder(v)
-    if (v == nil and settings.showBorder == nil and defaults.showBorder)
-    or (v == nil and settings.showBorder)
+    if (charSettings.enabled and v == nil and charSettings.showBorder == nil and defaults.showBorder)
+    or (charSettings.enabled and v == nil and charSettings.showBorder == nil)
+    or (not charSettings.enabled and v == nil and settings.showBorder == nil and defaults.showBorder)
+    or (not charSettings.enabled and v == nil and settings.showBorder)
     or (v)
     then
         -- whoaCharacterStats_border:SetBackdrop(BACKDROP_SLIDER_8_8)
@@ -367,69 +406,147 @@ local function showBorder(v)
 end
 function whoaCharacterStats_showBorder(v)
     if (v ~= nil) then
-        settings.showBorder = v
+        if charSettings.enabled then
+            charSettings.showBorder = v
+        else
+            settings.showBorder = v
+        end
     end
     showBorder(v)
 end
 
 function whoaCharacterStats_drawColumns(v)
-    if (v ~= nil) then
+    if (charSettings.enabled and v ~= nil) then
+        charSettings.switch = v
+    elseif (v ~= nil) then
         settings.switch = v
     end
-    setColumns(v)
+    if charSettings.enabled then
+        setColumns(charSettings.switch)
+    else
+        setColumns(settings.switch)
+    end
     whoaCharacterStats_update()
 end
 
 function whoaCharacterStats_defaultPosition()
-    settings.a1 = defaults.position.a1
-    settings.p  = defaults.position.p
-    settings.a2 = defaults.position.a2
-    settings.x  = defaults.position.x
-    settings.y  = defaults.position.y
     whoaCharacterStats_main:ClearAllPoints()
-    whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
     whoaCharacterStats_border:ClearAllPoints()
-    whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+    if charSettings.enabled then
+        charSettings.a1 = defaults.position.a1
+        charSettings.p  = defaults.position.p
+        charSettings.a2 = defaults.position.a2
+        charSettings.x  = defaults.position.x
+        charSettings.y  = defaults.position.y
+        whoaCharacterStats_main:SetPoint(charSettings.a1, charSettings.p, charSettings.a2, charSettings.x, charSettings.y)
+        whoaCharacterStats_border:SetPoint(charSettings.a1, charSettings.p, charSettings.a2, charSettings.x, charSettings.y)
+    else
+        settings.a1 = defaults.position.a1
+        settings.p  = defaults.position.p
+        settings.a2 = defaults.position.a2
+        settings.x  = defaults.position.x
+        settings.y  = defaults.position.y
+        whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+        whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+    end
     whoaCharacterStats_updateOptionPanel()
 end
 
 function whoaCharacterStats_centerPosition()
-    settings.a1 = "CENTER"
-    settings.p  = "UIParent"
-    settings.a2 = "CENTER"
-    settings.x  = 0
-    settings.y  = 0
     whoaCharacterStats_main:ClearAllPoints()
-    whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
     whoaCharacterStats_border:ClearAllPoints()
-    whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+    if charSettings.enabled then
+        charSettings.a1 = "CENTER"
+        charSettings.p  = "UIParent"
+        charSettings.a2 = "CENTER"
+        charSettings.x  = 0
+        charSettings.y  = 0
+        whoaCharacterStats_main:SetPoint(charSettings.a1, charSettings.p, charSettings.a2, charSettings.x, charSettings.y)
+        whoaCharacterStats_border:SetPoint(charSettings.a1, charSettings.p, charSettings.a2, charSettings.x, charSettings.y)
+    else
+        settings.a1 = "CENTER"
+        settings.p  = "UIParent"
+        settings.a2 = "CENTER"
+        settings.x  = 0
+        settings.y  = 0
+        whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+        whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+    end
     whoaCharacterStats_updateOptionPanel()
 end
 
 function whoaCharacterStats_updatePosition(x, y)
-    if (x ~= nil and y ~= nil) then
-        settings.x = x
-        settings.y = y
-    elseif (x ~= nil and y == nil) then
-        settings.x = x
-    elseif (x == nil and y ~= nil) then
-        settings.y = y
-    end
     whoaCharacterStats_main:ClearAllPoints()
-    whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
     whoaCharacterStats_border:ClearAllPoints()
-    whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x * settings.scale, settings.y * settings.scale)
+    if charSettings.enabled then
+        if (x ~= nil and y ~= nil) then
+            charSettings.x = x
+            charSettings.y = y
+        elseif (x ~= nil and y == nil) then
+            charSettings.x = x
+        elseif (x == nil and y ~= nil) then
+            charSettings.y = y
+        end
+        whoaCharacterStats_main:SetPoint(charSettings.a1, charSettings.p, charSettings.a2, charSettings.x, charSettings.y)
+        whoaCharacterStats_border:SetPoint(charSettings.a1, charSettings.p, charSettings.a2, charSettings.x * charSettings.scale, charSettings.y * charSettings.scale)
+    else
+        if (x ~= nil and y ~= nil) then
+            settings.x = x
+            settings.y = y
+        elseif (x ~= nil and y == nil) then
+            settings.x = x
+        elseif (x == nil and y ~= nil) then
+            settings.y = y
+        end
+        whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+        whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x * settings.scale, settings.y * settings.scale)
+    end
 end
 
 local function init()
-    settings = whoaCharacterStats_getSettings()
+    charSettings = whoaCharacterStats_getCharSettings() 
+    settings     = whoaCharacterStats_getSettings()
     whoaCharacterStats_main:ClearAllPoints()
-    whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
     whoaCharacterStats_border:ClearAllPoints()
-    whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x * settings.scale, settings.y * settings.scale)
-    showBorder(settings.showBorder)
-    setColumns(settings.switch)
+    if charSettings.enabled then
+        whoaCharacterStats_main:SetPoint(charSettings.a1, charSettings.p, charSettings.a2, charSettings.x, charSettings.y)
+        whoaCharacterStats_border:SetPoint(charSettings.a1, charSettings.p, charSettings.a2, charSettings.x * charSettings.scale, charSettings.y * charSettings.scale)
+        showBorder(charSettings.showBorder)
+        setColumns(charSettings.switch)
+    else
+        whoaCharacterStats_main:SetPoint(settings.a1, settings.p, settings.a2, settings.x, settings.y)
+        whoaCharacterStats_border:SetPoint(settings.a1, settings.p, settings.a2, settings.x * settings.scale, settings.y * settings.scale)
+        showBorder(settings.showBorder)
+        setColumns(settings.switch)
+    end
 end
+
+function whoaCharacterStats_charSpecificSettings(v)
+    if (v) then
+        charSettings.enabled = true
+    else
+        charSettings.enabled = false
+    end
+    init()
+end
+
+---------------------------------------------------
+-- ONUPDATE TIMER
+---------------------------------------------------
+local timer = 0
+local oneSec = true
+
+local function onUpdate(self, elapsed)
+    if oneSec then
+        timer = timer + elapsed
+        -- # init after 1sec delay
+        if timer >= 1 then
+            whoaCharacterStats_initStats()
+            oneSec = false
+        end
+    end
+end
+whoaCharacterStats_main:SetScript("OnUpdate", onUpdate)
 
 ---------------------------------------------------
 -- EVENTS
@@ -470,21 +587,3 @@ function whoaCharacterStats_main:OnEvent(event, ...)
     end
 end
 whoaCharacterStats_main:SetScript("OnEvent", whoaCharacterStats_main.OnEvent)
-
----------------------------------------------------
--- ONUPDATE TIMER
----------------------------------------------------
-local timer = 0
-local init = true
-
-local function onUpdate(self, elapsed)
-    if init then
-        timer = timer + elapsed
-        -- # init after 1sec delay
-        if timer >= 1 then
-            whoaCharacterStats_initStats()
-            init = false
-        end
-    end
-end
-whoaCharacterStats_main:SetScript("OnUpdate", onUpdate)

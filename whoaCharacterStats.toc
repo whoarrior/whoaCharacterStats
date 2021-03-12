@@ -2,9 +2,10 @@
 ## Title: whoa |cFFFFFFFFCharacterStats|r
 ## Notes: A simple textpanel with your stats.
 ## Author: whoa
-## Version: 9.0.5.3
+## Version: 9.0.5.4
 ## Dependencies: whoaLibrary
 ## SavedVariables: settings
+## SavedVariablesPerCharacter: charSettings
 
 config.lua
 settings.lua
