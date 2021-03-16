@@ -415,6 +415,23 @@ function whoaCharacterStats_showBorder(v)
     showBorder(v)
 end
 
+function whoaCharacterStats_changeOrder(n, value)
+    for k, v in pairs(getOrder()) do
+        if v == value then
+            if (charSettings.enabled) then
+                -- # charSettings
+                charSettings.order[k] = charSettings.order[n]
+                charSettings.order[n] = v
+            else
+                -- # settings
+                settings.order[k] = settings.order[n]
+                settings.order[n] = v
+            end
+        end
+    end
+    whoaCharacterStats_updateOptionPanel()
+end
+
 function whoaCharacterStats_drawColumns(v)
     if (charSettings.enabled and v ~= nil) then
         charSettings.switch = v

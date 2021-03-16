@@ -73,10 +73,10 @@ whoaCharacterStats.optionPanel.name = NAME
 ---------------------------------------------------
 -- BUTTONS
 ---------------------------------------------------
-whoaLibrary_createButton(WHOA_LIB_BTN_WIDTH-25, COL3_X+25, LINE_02_Y,   "Center Position",  function() whoaCharacterStats_centerPosition(); end)
-whoaLibrary_createButton(WHOA_LIB_BTN_WIDTH-25, COL3_X+25, LINE_03_Y,   "Default Position", function() whoaCharacterStats_defaultPosition(); end)
-whoaLibrary_createButton(WHOA_LIB_BTN_WIDTH-25, COL3_X+25, LINE_06_Y,   "Default Scaling",  function() whoaCharacterStats_defaultScale(); end)
-whoaLibrary_createButton(WHOA_LIB_BTN_WIDTH-25, COL3_X+25, BOTTOM_LINE, "Default Settings", function()
+whoaLibrary_createButton(whoaCharacterStats.optionPanel, WHOA_LIB_BTN_WIDTH-25, COL3_X+25, LINE_02_Y,   "Center Position",  function() whoaCharacterStats_centerPosition() end)
+whoaLibrary_createButton(whoaCharacterStats.optionPanel, WHOA_LIB_BTN_WIDTH-25, COL3_X+25, LINE_03_Y,   "Default Position", function() whoaCharacterStats_defaultPosition() end)
+whoaLibrary_createButton(whoaCharacterStats.optionPanel, WHOA_LIB_BTN_WIDTH-25, COL3_X+25, LINE_06_Y,   "Default Scaling",  function() whoaCharacterStats_defaultScale() end)
+whoaLibrary_createButton(whoaCharacterStats.optionPanel, WHOA_LIB_BTN_WIDTH-25, COL3_X+25, BOTTOM_LINE, "Default Settings", function()
     whoaCharacterStats_setDefaults()
     whoaCharacterStats_drawColumns()
     whoaCharacterStats_showBorder()
@@ -92,29 +92,29 @@ local function getSwitch()    if charSettings.enabled then return charSettings.s
 ---------------------------------------------------
 -- CHECKBOXES
 ---------------------------------------------------
-whoaLibrary_createCheckButton(addonName.."CharSpecificCb",  COL3_X,          -10, "Character Specific Settings", "Click this to toggle between global settings and settings specific to this character.", charSettings.enabled, function(self, v) whoaCharacterStats_charSpecificSettings(v); whoaCharacterStats_updatePosition(); whoaCharacterStats_update(); whoaCharacterStats_updateOptionPanel() end)
-whoaLibrary_createCheckButton(addonName.."SwitchColumnsCb", COL1_X+20, LINE_04_Y, "Switch Columns",              "Switch the values in the left and the right column.",                                   getSwitch(),          function(self, v) whoaCharacterStats_drawColumns(v) end)
-whoaLibrary_createCheckButton(addonName.."ShowBorderCb",    COL1_X+20, LINE_05_Y, "Show Border",                 "Show a border.",                                                                        getBorder(),          function(self, v) whoaCharacterStats_showBorder(v); whoaCharacterStats_update() end)
-whoaLibrary_createCheckButton(addonName.."HighlightCb",     COL1_X+20, LINE_06_Y, "Highlighting",                "Highlight increasing, or decreasing stats.",                                            getHighlight(),       function(self, v) if charSettings.enabled then charSettings.highlight = v else settings.highlight = v end end)
+whoaLibrary_createCheckButton(addonName.."CharSpecificCb",  whoaCharacterStats.optionPanel, COL3_X,          -10, "Character Specific Settings", "Click this to toggle between global settings and settings specific to this character.", charSettings.enabled, function(self, v) whoaCharacterStats_charSpecificSettings(v); whoaCharacterStats_updatePosition(); whoaCharacterStats_update(); whoaCharacterStats_updateOptionPanel() end)
+whoaLibrary_createCheckButton(addonName.."SwitchColumnsCb", whoaCharacterStats.optionPanel, COL1_X+20, LINE_04_Y, "Switch Columns",              "Switch the values in the left and the right column.",                                   getSwitch(),          function(self, v) whoaCharacterStats_drawColumns(v) end)
+whoaLibrary_createCheckButton(addonName.."ShowBorderCb",    whoaCharacterStats.optionPanel, COL1_X+20, LINE_05_Y, "Show Border",                 "Show a border.",                                                                        getBorder(),          function(self, v) whoaCharacterStats_showBorder(v); whoaCharacterStats_update() end)
+whoaLibrary_createCheckButton(addonName.."HighlightCb",     whoaCharacterStats.optionPanel, COL1_X+20, LINE_06_Y, "Highlighting",                "Highlight increasing, or decreasing stats.",                                            getHighlight(),       function(self, v) if charSettings.enabled then charSettings.highlight = v else settings.highlight = v end end)
 
 ---------------------------------------------------
 -- DROPDOWNS
 ---------------------------------------------------
-whoaLibrary_createDropDown(addonName.."AnchorDropDown",        ANCHORS,  COL1_X, LINE_01_Y, "Anchor",             function() if charSettings.enabled then return charSettings.a1           else return settings.a1           end end, function(v) if charSettings.enabled then charSettings.a1           = v else settings.a1           = v end end, function() whoaCharacterStats_updatePosition() end)
-whoaLibrary_createDropDown(addonName.."ParentDropDown",        PARENTS,  COL1_X, LINE_02_Y, "Parent",             function() if charSettings.enabled then return charSettings.p            else return settings.p            end end, function(v) if charSettings.enabled then charSettings.p            = v else settings.p            = v end end, function() whoaCharacterStats_updatePosition() end)
-whoaLibrary_createDropDown(addonName.."AnchorParentDropDown",  ANCHORS,  COL1_X, LINE_03_Y, "Anchor Parent",      function() if charSettings.enabled then return charSettings.a2           else return settings.a2           end end, function(v) if charSettings.enabled then charSettings.a2           = v else settings.a2           = v end end, function() whoaCharacterStats_updatePosition() end)
-whoaLibrary_createDropDown(addonName.."DecimalPlacesDropDown", DECIMALS, COL2_X, LINE_04_Y, "Decimal Places",     function() if charSettings.enabled then return charSettings.dp           else return settings.dp           end end, function(v) if charSettings.enabled then charSettings.dp           = v else settings.dp           = v end end, function() whoaCharacterStats_update() end)
-whoaLibrary_createDropDown(addonName.."FirstDropDown",         STATS,    COL1_X, LINE_07_Y, "1st secondary stat", function() if charSettings.enabled then return charSettings.order["1st"] else return settings.order["1st"] end end, function(v) if charSettings.enabled then charSettings.order["1st"] = v else settings.order["1st"] = v end end, function() whoaCharacterStats_drawColumns() end)
-whoaLibrary_createDropDown(addonName.."SecondDropDown",        STATS,    COL1_X, LINE_08_Y, "2nd secondary stat", function() if charSettings.enabled then return charSettings.order["2nd"] else return settings.order["2nd"] end end, function(v) if charSettings.enabled then charSettings.order["2nd"] = v else settings.order["2nd"] = v end end, function() whoaCharacterStats_drawColumns() end)
-whoaLibrary_createDropDown(addonName.."ThirdDropDown",         STATS,    COL1_X, LINE_09_Y, "3rd secondary stat", function() if charSettings.enabled then return charSettings.order["3rd"] else return settings.order["3rd"] end end, function(v) if charSettings.enabled then charSettings.order["3rd"] = v else settings.order["3rd"] = v end end, function() whoaCharacterStats_drawColumns() end)
-whoaLibrary_createDropDown(addonName.."FourthDropDown",        STATS,    COL1_X, LINE_10_Y, "4th secondary stat", function() if charSettings.enabled then return charSettings.order["4th"] else return settings.order["4th"] end end, function(v) if charSettings.enabled then charSettings.order["4th"] = v else settings.order["4th"] = v end end, function() whoaCharacterStats_drawColumns() end)
+whoaLibrary_createDropDown(addonName.."AnchorDropDown",        whoaCharacterStats.optionPanel, ANCHORS,  COL1_X, LINE_01_Y, "Anchor",             function() if charSettings.enabled then return charSettings.a1           else return settings.a1           end end, function(v) if charSettings.enabled then charSettings.a1 = v                      else settings.a1 = v                          end end, function() whoaCharacterStats_updatePosition() end)
+whoaLibrary_createDropDown(addonName.."ParentDropDown",        whoaCharacterStats.optionPanel, PARENTS,  COL1_X, LINE_02_Y, "Parent",             function() if charSettings.enabled then return charSettings.p            else return settings.p            end end, function(v) if charSettings.enabled then charSettings.p  = v                      else settings.p  = v                          end end, function() whoaCharacterStats_updatePosition() end)
+whoaLibrary_createDropDown(addonName.."AnchorParentDropDown",  whoaCharacterStats.optionPanel, ANCHORS,  COL1_X, LINE_03_Y, "Anchor Parent",      function() if charSettings.enabled then return charSettings.a2           else return settings.a2           end end, function(v) if charSettings.enabled then charSettings.a2 = v                      else settings.a2 = v                          end end, function() whoaCharacterStats_updatePosition() end)
+whoaLibrary_createDropDown(addonName.."DecimalPlacesDropDown", whoaCharacterStats.optionPanel, DECIMALS, COL2_X, LINE_04_Y, "Decimal Places",     function() if charSettings.enabled then return charSettings.dp           else return settings.dp           end end, function(v) if charSettings.enabled then charSettings.dp = v                      else settings.dp = v                          end end, function() whoaCharacterStats_update() end)
+whoaLibrary_createDropDown(addonName.."FirstDropDown",         whoaCharacterStats.optionPanel, STATS,    COL1_X, LINE_07_Y, "1st secondary stat", function() if charSettings.enabled then return charSettings.order["1st"] else return settings.order["1st"] end end, function(v) if charSettings.enabled then whoaCharacterStats_changeOrder("1st", v) else whoaCharacterStats_changeOrder("1st", v) end end, function() whoaCharacterStats_drawColumns() end)
+whoaLibrary_createDropDown(addonName.."SecondDropDown",        whoaCharacterStats.optionPanel, STATS,    COL1_X, LINE_08_Y, "2nd secondary stat", function() if charSettings.enabled then return charSettings.order["2nd"] else return settings.order["2nd"] end end, function(v) if charSettings.enabled then whoaCharacterStats_changeOrder("2nd", v) else whoaCharacterStats_changeOrder("2nd", v) end end, function() whoaCharacterStats_drawColumns() end)
+whoaLibrary_createDropDown(addonName.."ThirdDropDown",         whoaCharacterStats.optionPanel, STATS,    COL1_X, LINE_09_Y, "3rd secondary stat", function() if charSettings.enabled then return charSettings.order["3rd"] else return settings.order["3rd"] end end, function(v) if charSettings.enabled then whoaCharacterStats_changeOrder("3rd", v) else whoaCharacterStats_changeOrder("3rd", v) end end, function() whoaCharacterStats_drawColumns() end)
+whoaLibrary_createDropDown(addonName.."FourthDropDown",        whoaCharacterStats.optionPanel, STATS,    COL1_X, LINE_10_Y, "4th secondary stat", function() if charSettings.enabled then return charSettings.order["4th"] else return settings.order["4th"] end end, function(v) if charSettings.enabled then whoaCharacterStats_changeOrder("4th", v) else whoaCharacterStats_changeOrder("4th", v) end end, function() whoaCharacterStats_drawColumns() end)
 
 ---------------------------------------------------
 -- SLIDER
 ---------------------------------------------------
-whoaLibrary_createSlider(addonName.."XSlider",       "x",       false, COL2_X, LINE_01_Y+2, -200, 200, function(v) whoaCharacterStats_updatePosition(v, nil) end)
-whoaLibrary_createSlider(addonName.."YSlider",       "y",       false, COL2_X, LINE_02_Y+2, -200, 200, function(v) whoaCharacterStats_updatePosition(nil, v) end)
-whoaLibrary_createSlider(addonName.."ScalingSlider", "Scaling", true,  COL2_X, LINE_06_Y,     .5,   3, function(v) whoaCharacterStats_setScale(v) end)
+whoaLibrary_createSlider(addonName.."XSlider",       whoaCharacterStats.optionPanel, "x",       false, COL2_X, LINE_01_Y+2, -200, 200, function(v) whoaCharacterStats_updatePosition(v, nil) end)
+whoaLibrary_createSlider(addonName.."YSlider",       whoaCharacterStats.optionPanel, "y",       false, COL2_X, LINE_02_Y+2, -200, 200, function(v) whoaCharacterStats_updatePosition(nil, v) end)
+whoaLibrary_createSlider(addonName.."ScalingSlider", whoaCharacterStats.optionPanel, "Scaling", true,  COL2_X, LINE_06_Y,     .5,   3, function(v) whoaCharacterStats_setScale(v) end)
 
 ---------------------------------------------------
 
@@ -200,55 +200,48 @@ function whoaCharacterStats_getSettings()
     if settings.lh           == nil then settings.lh           = defaults.lh            end
     if settings.dp           == nil then settings.dp           = defaults.dp            end
     if settings.scale        == nil then settings.scale        = defaults.scale         end
-    if settings.order["1st"] == nil then settings.order["1st"] = defaults.order["1st"]  end
-    if settings.order["2nd"] == nil then settings.order["2nd"] = defaults.order["2nd"]  end
-    if settings.order["3rd"] == nil then settings.order["3rd"] = defaults.order["3rd"]  end
-    if settings.order["4th"] == nil then settings.order["4th"] = defaults.order["4th"]  end
     if settings.a1           == nil then settings.a1           = defaults.position.a1   end
     if settings.p            == nil then settings.p            = defaults.position.p    end
     if settings.a2           == nil then settings.a2           = defaults.position.a2   end
     if settings.x            == nil then settings.x            = defaults.position.x    end
     if settings.y            == nil then settings.y            = defaults.position.y    end
+    if settings.order["1st"] == nil then settings.order["1st"] = defaults.order["1st"]  end
+    if settings.order["2nd"] == nil then settings.order["2nd"] = defaults.order["2nd"]  end
+    if settings.order["3rd"] == nil then settings.order["3rd"] = defaults.order["3rd"]  end
+    if settings.order["4th"] == nil then settings.order["4th"] = defaults.order["4th"]  end
     return settings
 end
 
 function whoaCharacterStats_getCharSettings()
-    if charSettings.enabled          == nil then charSettings.enabled      = false                  end
-    if charSettings.showBorder       == nil then charSettings.showBorder   = defaults.showBorder    end
-    if charSettings.highlight        == nil then charSettings.highlight    = defaults.highlight     end
-    if charSettings.switch           == nil then
-        charSettings.switch           = defaults.switch
-        if charSettings.col1         == nil then charSettings.col1         = defaults.left.col1     end
-        if charSettings.col2         == nil then charSettings.col2         = defaults.left.col2     end
-        if charSettings.txt1         == nil then charSettings.txt1         = defaults.left.txt1     end
-        if charSettings.txt2         == nil then charSettings.txt2         = defaults.left.txt2     end
-        if charSettings.padding      == nil then charSettings.padding      = defaults.left.padding  end
+    if charSettings.enabled      == nil then charSettings.enabled      = false                  end
+    if charSettings.showBorder   == nil then charSettings.showBorder   = defaults.showBorder    end
+    if charSettings.highlight    == nil then charSettings.highlight    = defaults.highlight     end
+    if charSettings.switch       == nil then
+        charSettings.switch       = defaults.switch
+        if charSettings.col1     == nil then charSettings.col1         = defaults.left.col1     end
+        if charSettings.col2     == nil then charSettings.col2         = defaults.left.col2     end
+        if charSettings.txt1     == nil then charSettings.txt1         = defaults.left.txt1     end
+        if charSettings.txt2     == nil then charSettings.txt2         = defaults.left.txt2     end
+        if charSettings.padding  == nil then charSettings.padding      = defaults.left.padding  end
     else
-        if charSettings.col1         == nil then charSettings.col1         = defaults.right.col1    end
-        if charSettings.col2         == nil then charSettings.col2         = defaults.right.col2    end
-        if charSettings.txt1         == nil then charSettings.txt1         = defaults.right.txt1    end
-        if charSettings.txt2         == nil then charSettings.txt2         = defaults.right.txt2    end
-        if charSettings.padding      == nil then charSettings.padding      = defaults.right.padding end
+        if charSettings.col1     == nil then charSettings.col1         = defaults.right.col1    end
+        if charSettings.col2     == nil then charSettings.col2         = defaults.right.col2    end
+        if charSettings.txt1     == nil then charSettings.txt1         = defaults.right.txt1    end
+        if charSettings.txt2     == nil then charSettings.txt2         = defaults.right.txt2    end
+        if charSettings.padding  == nil then charSettings.padding      = defaults.right.padding end
     end
-    if charSettings.lh               == nil then charSettings.lh           = defaults.lh            end
-    if charSettings.dp               == nil then charSettings.dp           = defaults.dp            end
-    if charSettings.scale            == nil then charSettings.scale        = defaults.scale         end
-    if charSettings.a1               == nil then charSettings.a1           = defaults.position.a1   end
-    if charSettings.p                == nil then charSettings.p            = defaults.position.p    end
-    if charSettings.a2               == nil then charSettings.a2           = defaults.position.a2   end
-    if charSettings.x                == nil then charSettings.x            = defaults.position.x    end
-    if charSettings.y                == nil then charSettings.y            = defaults.position.y    end
-    -- if charSettings.order            == nil then
-    --     charSettings.order["1st"]     = defaults.order["1st"]
-    --     charSettings.order["2nd"]     = defaults.order["2nd"]
-    --     charSettings.order["3rd"]     = defaults.order["3rd"]
-    --     charSettings.order["4th"]     = defaults.order["4th"]
-    -- else
-    --     if charSettings.order["1st"] == nil then charSettings.order["1st"] = defaults.order["1st"]  end
-    --     if charSettings.order["2nd"] == nil then charSettings.order["2nd"] = defaults.order["2nd"]  end
-    --     if charSettings.order["3rd"] == nil then charSettings.order["3rd"] = defaults.order["3rd"]  end
-    --     if charSettings.order["4th"] == nil then charSettings.order["4th"] = defaults.order["4th"]  end
-    -- end
+    if charSettings.lh           == nil then charSettings.lh           = defaults.lh            end
+    if charSettings.dp           == nil then charSettings.dp           = defaults.dp            end
+    if charSettings.scale        == nil then charSettings.scale        = defaults.scale         end
+    if charSettings.a1           == nil then charSettings.a1           = defaults.position.a1   end
+    if charSettings.p            == nil then charSettings.p            = defaults.position.p    end
+    if charSettings.a2           == nil then charSettings.a2           = defaults.position.a2   end
+    if charSettings.x            == nil then charSettings.x            = defaults.position.x    end
+    if charSettings.y            == nil then charSettings.y            = defaults.position.y    end
+    if charSettings.order["1st"] == nil then charSettings.order["1st"] = defaults.order["1st"]  end
+    if charSettings.order["2nd"] == nil then charSettings.order["2nd"] = defaults.order["2nd"]  end
+    if charSettings.order["3rd"] == nil then charSettings.order["3rd"] = defaults.order["3rd"]  end
+    if charSettings.order["4th"] == nil then charSettings.order["4th"] = defaults.order["4th"]  end
     return charSettings
 end
 
