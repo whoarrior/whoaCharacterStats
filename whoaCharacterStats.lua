@@ -571,6 +571,7 @@ whoaCharacterStats_main:SetScript("OnUpdate", onUpdate)
 --local whoaCharacterStats_main = CreateFrame("Frame", nil, UIParent)
 whoaCharacterStats_main:RegisterEvent("PLAYER_LOGIN")
 whoaCharacterStats_main:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+whoaCharacterStats_main:RegisterEvent("PLAYER_ENTERING_BATTLEGROUND")
 whoaCharacterStats_main:RegisterEvent("UNIT_AURA")
 -- whoaCharacterStats_main:RegisterEvent("ADDON_LOADED")
 whoaCharacterStats_main:RegisterEvent("VARIABLES_LOADED")
@@ -594,6 +595,9 @@ function whoaCharacterStats_main:OnEvent(event, ...)
         whoaCharacterStats_updateOptionPanel()
     elseif event == "PLAYER_EQUIPMENT_CHANGED" then
         whoaLog("PLAYER_EQUIPMENT_CHANGED", "DEBUG", LOG_LEVEL, ADDON)
+        whoaCharacterStats_initStats()
+    elseif event == "PLAYER_ENTERING_BATTLEGROUND" then
+        whoaLog("PLAYER_ENTERING_BATTLEGROUND", "DEBUG", LOG_LEVEL, ADDON)
         whoaCharacterStats_initStats()
     elseif event == "UNIT_AURA" then
         local unit = ...

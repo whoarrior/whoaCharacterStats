@@ -238,10 +238,6 @@ function whoaCharacterStats_getCharSettings()
     if charSettings.a2           == nil then charSettings.a2           = defaults.position.a2   end
     if charSettings.x            == nil then charSettings.x            = defaults.position.x    end
     if charSettings.y            == nil then charSettings.y            = defaults.position.y    end
-    if charSettings.order["1st"] == nil then charSettings.order["1st"] = defaults.order["1st"]  end
-    if charSettings.order["2nd"] == nil then charSettings.order["2nd"] = defaults.order["2nd"]  end
-    if charSettings.order["3rd"] == nil then charSettings.order["3rd"] = defaults.order["3rd"]  end
-    if charSettings.order["4th"] == nil then charSettings.order["4th"] = defaults.order["4th"]  end
     return charSettings
 end
 
